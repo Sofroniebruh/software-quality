@@ -1,9 +1,6 @@
 package com.nhl.factory_method;
 
-import com.nhl.BitmapItem;
 import com.nhl.Slide;
-import com.nhl.SlideItem;
-import com.nhl.TextItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
