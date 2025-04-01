@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Sofroniebruh/software-quality   '
+                git branch: 'Sofronie`s-branch', url: 'https://github.com/Sofroniebruh/software-quality'
             }
         }
 
