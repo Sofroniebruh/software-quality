@@ -25,7 +25,7 @@ class SlideItemFactoryTest {
 
     @Test
     void createSlideItem_shouldReturnNull_whenTypeIsUnknown() {
-        SlideItem item = SlideItemFactory.createSlideItem("unknown");
+        SlideItem item = SlideItemFactory.createSlideItem("qwerty");
         assertNull(item);
     }
 }

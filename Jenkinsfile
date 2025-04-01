@@ -7,7 +7,7 @@ pipeline {
     }
 
     triggers {
-        pollSCM '*/5****'
+        pollSCM 'H/5 * * * *'
     }
 
     environment {
@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-repo.git'
+                git 'https://github.com/Sofroniebruh/software-quality   '
             }
         }
 
