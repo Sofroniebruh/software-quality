@@ -9,8 +9,13 @@ public class AboutCommand implements Command {
         this.parent = parent;
     }
 
-    public Frame getParent() { return parent; }
-    public void setParent(Frame parent) { this.parent = parent; }
+    public Frame getParent() {
+        return parent;
+    }
+
+    public void setParent(Frame parent) {
+        this.parent = parent;
+    }
 
     @Override
     public void execute() {
