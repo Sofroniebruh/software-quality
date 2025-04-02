@@ -16,10 +16,10 @@ import java.util.Vector;
  */
 
 public class Slide {
-	public final static int WIDTH = 1200;
-	public final static int HEIGHT = 800;
-	protected String title; // title is saved separately
-	protected Vector<SlideItem> items; // slide items are saved in a Vector
+	public static final int WIDTH = 1200;
+	public static final int HEIGHT = 800;
+	protected String title;
+	protected Vector<SlideItem> items;
 
 	public Slide() {
 		items = new Vector<SlideItem>();
@@ -47,7 +47,7 @@ public class Slide {
 
 	// give the  com.nhl.SlideItem
 	public SlideItem getSlideItem(int number) {
-		return (SlideItem)items.elementAt(number);
+		return items.elementAt(number);
 	}
 
 	// give all SlideItems in a Vector
@@ -79,6 +79,6 @@ public class Slide {
 
 	// Give the scale for drawing
 	private float getScale(Rectangle area) {
-		return Math.min(((float)area.width) / ((float)WIDTH), ((float)area.height) / ((float)HEIGHT));
+		return Math.min(((float) area.width) / ((float) WIDTH), ((float) area.height) / ((float) HEIGHT));
 	}
 }

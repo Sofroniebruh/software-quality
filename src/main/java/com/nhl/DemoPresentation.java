@@ -13,15 +13,15 @@ package com.nhl;
 class DemoPresentation extends Accessor {
 
 	public void loadFile(Presentation presentation, String unusedFilename) {
-		presentation.setTitle("Demo com.nhl.Presentation");
+		presentation.setTitle("Demo Presentation");
 		Slide slide;
 		slide = new Slide();
-		slide.setTitle("com.nhl.JabberPoint");
-		slide.append(1, "The Java com.nhl.Presentation Tool");
+		slide.setTitle("JabberPoint");
+		slide.append(1, "The Java Presentation Tool");
 		slide.append(2, "Copyright (c) 1996-2000: Ian Darwin");
 		slide.append(2, "Copyright (c) 2000-now:");
 		slide.append(2, "Gert Florijn andn Sylvia Stuurman");
-		slide.append(4, "Starting com.nhl.JabberPoint without a filename");
+		slide.append(4, "Starting JabberPoint without a filename");
 		slide.append(4, "shows this presentation");
 		slide.append(1, "Navigate:");
 		slide.append(3, "Next slide: PgDn or Enter");
@@ -46,7 +46,7 @@ class DemoPresentation extends Accessor {
 		slide.append(2, "use File->Open from the menu.");
 		slide.append(1, " ");
 		slide.append(1, "This is the end of the presentation.");
-		slide.append(new BitmapItem(1, "com.nhl.JabberPoint.jpg"));
+		slide.append(new BitmapItem(1, "JabberPoint.jpg"));
 		presentation.append(slide);
 	}
 
