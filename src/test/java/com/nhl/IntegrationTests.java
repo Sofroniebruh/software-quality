@@ -11,6 +11,8 @@ public class IntegrationTests {
 
     @BeforeEach
     public void setUp() {
+        System.setProperty("java.awt.headless", "true");
+
         presentation = new Presentation();
         Slide slide1 = new Slide();
         slide1.setTitle("Slide 1");
