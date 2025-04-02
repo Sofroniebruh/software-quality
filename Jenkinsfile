@@ -47,12 +47,12 @@ pipeline {
         }
 
         stage('Push to Main if Tests Pass') {
-                    when {
-                        anyOf {
-                                branch 'dev'
-                                branch 'main'
-                        }
-                    }
+//                     when {
+//                         anyOf {
+//                                 branch 'dev'
+//                                 branch 'main'
+//                         }
+//                     }
                     steps {
                         script {
                             withCredentials([usernamePassword(credentialsId: 'github-credentials-for-sofronie-account', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
