@@ -7,8 +7,8 @@ pipeline {
     }
 
     triggers {
-        pollSCM 'H/5 * * * *'
-    }
+            githubPush()
+        }
 
     environment {
         MAVEN_OPTS = "-Xmx1024m"
@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'Sofronie`s-branch', url: 'https://github.com/Sofroniebruh/software-quality'
+                git branch: 'dev', url: 'https://github.com/Sofroniebruh/software-quality'
             }
         }
 
@@ -29,13 +29,15 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
+                script {
+                        sh 'mvn test'
+                     }
                 }
-            }
+                post {
+                     always {
+                         junit 'target/surefire-reports/*.xml'
+                     }
+                }
         }
 
         stage('Code Analysis') {
@@ -43,12 +45,35 @@ pipeline {
                 sh 'mvn verify'
             }
         }
+
+        stage('Push to Main if Tests Pass') {
+                    when {
+                        branch 'dev'
+                    }
+                    steps {
+                        script {
+                            withCredentials([usernamePassword(credentialsId: 'github-credentials-for-sofronie-account', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                                sh '''
+                                git config --global user.email "jenkins@example.com"
+                                git config --global user.name "Jenkins CI"
+                                git remote set-url origin https://${GIT_USER}:${GIT_PASS}@github.com/Sofroniebruh/software-quality.git
+                                git checkout main
+                                git merge dev
+                                git push origin main
+                                '''
+                            }
+                        }
+                    }
+                }
     }
 
     post {
-        always {
-//             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-            junit 'target/surefire-reports/*.xml'
-        }
+            failure {
+                echo 'Build failed. Check logs for more details.'
+            }
+            success {
+                echo 'Build successful!'
+            }
     }
 }
+
