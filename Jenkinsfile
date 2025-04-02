@@ -48,7 +48,10 @@ pipeline {
 
         stage('Push to Main if Tests Pass') {
                     when {
-                        branch 'dev'
+                        anyOf {
+                                branch 'dev'
+                                branch 'main'
+                        }
                     }
                     steps {
                         script {
