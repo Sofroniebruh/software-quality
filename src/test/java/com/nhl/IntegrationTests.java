@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.awt.event.KeyEvent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class IntegrationTests {
     private Presentation presentation;
@@ -26,7 +27,9 @@ public class IntegrationTests {
 
     @Test
     public void testKeyControllerNextSlide() {
-        KeyEvent enterEvent = new KeyEvent(new java.awt.Button(), KeyEvent.KEY_PRESSED,
+        java.awt.Button mockButton = mock(java.awt.Button.class);
+
+        KeyEvent enterEvent = new KeyEvent(mockButton, KeyEvent.KEY_PRESSED,
                 System.currentTimeMillis(), 0, KeyEvent.VK_ENTER, '\n');
         keyController.keyPressed(enterEvent);
         assertEquals(1, presentation.getSlideNumber());
@@ -34,8 +37,10 @@ public class IntegrationTests {
 
     @Test
     public void testKeyControllerPrevSlide() {
+        java.awt.Button mockButton = mock(java.awt.Button.class);
+
         presentation.setSlideNumber(1);
-        KeyEvent upEvent = new KeyEvent(new java.awt.Button(), KeyEvent.KEY_PRESSED,
+        KeyEvent upEvent = new KeyEvent(mockButton, KeyEvent.KEY_PRESSED,
                 System.currentTimeMillis(), 0, KeyEvent.VK_UP, ' ');
         keyController.keyPressed(upEvent);
         assertEquals(0, presentation.getSlideNumber());
