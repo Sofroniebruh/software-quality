@@ -5,11 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CommandPatternTests {
+public class CommandPatternTests
+{
     private Presentation presentation;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp()
+    {
         presentation = new Presentation();
         Slide slide1 = new Slide();
         slide1.setTitle("Slide 1");
@@ -21,7 +23,8 @@ public class CommandPatternTests {
     }
 
     @Test
-    public void testNextSlideCommand() {
+    public void testNextSlideCommand()
+    {
         NextSlideCommand next = new NextSlideCommand(presentation);
         next.execute();
         assertEquals(1, presentation.getSlideNumber());
@@ -30,7 +33,8 @@ public class CommandPatternTests {
     }
 
     @Test
-    public void testPrevSlideCommand() {
+    public void testPrevSlideCommand()
+    {
         presentation.setSlideNumber(1);
         PrevSlideCommand prev = new PrevSlideCommand(presentation);
         prev.execute();
@@ -40,27 +44,29 @@ public class CommandPatternTests {
     }
 
     @Test
-    public void testGoToCommandUndo() {
+    public void testGoToCommandUndo()
+    {
         presentation.setSlideNumber(0);
-        // Use a test subclass to simulate input without a dialog.
         TestableGoToCommand goTo = new TestableGoToCommand(presentation, "2");
         goTo.execute();
-        // Page 2 means slide index 1.
         assertEquals(1, presentation.getSlideNumber());
         goTo.undo();
         assertEquals(0, presentation.getSlideNumber());
     }
 
-    private static class TestableGoToCommand extends GoToCommand {
+    private static class TestableGoToCommand extends GoToCommand
+    {
         private String testInput;
 
-        public TestableGoToCommand(Presentation presentation, String input) {
+        public TestableGoToCommand(Presentation presentation, String input)
+        {
             super(presentation);
             this.testInput = input;
         }
 
         @Override
-        public void execute() {
+        public void execute()
+        {
             previousSlideNumber = getPresentation().getSlideNumber();
             int pageNumber = Integer.parseInt(testInput);
             getPresentation().setSlideNumber(pageNumber - 1);

@@ -1,6 +1,7 @@
 package com.nhl;
 
-public interface Command {
+public interface Command
+{
     void execute();
     void undo();
 }

@@ -2,16 +2,20 @@ package com.nhl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.awt.event.KeyEvent;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
-public class IntegrationTests {
+public class IntegrationTests
+{
     private Presentation presentation;
     private KeyController keyController;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp()
+    {
         System.setProperty("java.awt.headless", "true");
 
         presentation = new Presentation();
@@ -26,7 +30,8 @@ public class IntegrationTests {
     }
 
     @Test
-    public void testKeyControllerNextSlide() {
+    public void testKeyControllerNextSlide()
+    {
         java.awt.Button mockButton = mock(java.awt.Button.class);
 
         KeyEvent enterEvent = new KeyEvent(mockButton, KeyEvent.KEY_PRESSED,
@@ -36,7 +41,8 @@ public class IntegrationTests {
     }
 
     @Test
-    public void testKeyControllerPrevSlide() {
+    public void testKeyControllerPrevSlide()
+    {
         java.awt.Button mockButton = mock(java.awt.Button.class);
 
         presentation.setSlideNumber(1);

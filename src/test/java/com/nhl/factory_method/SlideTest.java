@@ -11,16 +11,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
-class SlideTest {
+class SlideTest
+{
     private Slide slide;
 
     @BeforeEach
-    void setUp() {
+    void setUp()
+    {
         slide = mock(Slide.class);
     }
 
     @Test
-    void slideItemAction_shouldAppendSlideItem_whenTypeIsValid() {
+    void slideItemAction_shouldAppendSlideItem_whenTypeIsValid()
+    {
         SlideItem item = SlideItemFactory.createSlideItem(XMLAccessor.IMAGE);
 
         assertNotNull(item);
@@ -30,7 +33,8 @@ class SlideTest {
     }
 
     @Test
-    void slideItemAction_shouldNotAppendSlideItem_whenTypeIsInvalid() {
+    void slideItemAction_shouldNotAppendSlideItem_whenTypeIsInvalid()
+    {
         SlideItem item = SlideItemFactory.createSlideItem("qwerty");
 
         assertNull(item);

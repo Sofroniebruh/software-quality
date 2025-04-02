@@ -7,24 +7,27 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SlideItemFactoryTest {
-
+class SlideItemFactoryTest
+{
     @Test
-    void createSlideItem_shouldReturnTextItem_whenTypeIsText() {
+    void createSlideItem_shouldReturnTextItem_whenTypeIsText()
+    {
         SlideItem item = SlideItemFactory.createSlideItem("text");
         assertNotNull(item);
         assertInstanceOf(TextItem.class, item);
     }
 
     @Test
-    void createSlideItem_shouldReturnBitmapItem_whenTypeIsImage() {
+    void createSlideItem_shouldReturnBitmapItem_whenTypeIsImage()
+    {
         SlideItem item = SlideItemFactory.createSlideItem("image");
         assertNotNull(item);
         assertInstanceOf(BitmapItem.class, item);
     }
 
     @Test
-    void createSlideItem_shouldReturnNull_whenTypeIsUnknown() {
+    void createSlideItem_shouldReturnNull_whenTypeIsUnknown()
+    {
         SlideItem item = SlideItemFactory.createSlideItem("qwerty");
         assertNull(item);
     }

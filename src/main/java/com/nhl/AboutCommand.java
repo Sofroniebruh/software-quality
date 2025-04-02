@@ -2,28 +2,34 @@ package com.nhl;
 
 import java.awt.Frame;
 
-public class AboutCommand implements Command {
+public class AboutCommand implements Command
+{
     private Frame parent;
 
-    public AboutCommand(Frame parent) {
+    public AboutCommand(Frame parent)
+    {
         this.parent = parent;
     }
 
-    public Frame getParent() {
+    public Frame getParent()
+    {
         return parent;
     }
 
-    public void setParent(Frame parent) {
+    public void setParent(Frame parent)
+    {
         this.parent = parent;
     }
 
     @Override
-    public void execute() {
+    public void execute()
+    {
         AboutBox.show(parent);
     }
 
     @Override
-    public void undo() {
+    public void undo()
+    {
         // No undo available.
     }
 }

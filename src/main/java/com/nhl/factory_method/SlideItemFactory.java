@@ -5,11 +5,14 @@ import com.nhl.SlideItem;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class SlideItemFactory {
+public abstract class SlideItemFactory
+{
     private static final Map<String, SlideItemFactory> records = new HashMap<>();
 
-    private static void initializeRecords() {
-        if (records.isEmpty()) {
+    private static void initializeRecords()
+    {
+        if (records.isEmpty())
+        {
             records.put(XMLAccessor.TEXT, new TextItemFactory());
             records.put(XMLAccessor.IMAGE, new BitmapItemFactory());
         }
@@ -17,11 +20,13 @@ public abstract class SlideItemFactory {
 
     public abstract SlideItem initializeItem();
 
-    public static SlideItem createSlideItem(String type) {
+    public static SlideItem createSlideItem(String type)
+    {
         initializeRecords();
         SlideItemFactory factory = records.get(type);
 
-        if (factory != null) {
+        if (factory != null)
+        {
             return factory.initializeItem();
         }
 
