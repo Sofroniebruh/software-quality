@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.nhl.Accessor;
 import com.nhl.*;
 import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
