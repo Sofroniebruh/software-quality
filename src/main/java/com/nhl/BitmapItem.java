@@ -35,7 +35,9 @@ public class BitmapItem extends SlideItem
             {
                 System.err.println(FILE + this.imageName + NOTFOUND);
                 this.bufferedImage = null;
-                JOptionPane.showMessageDialog(null, "Image was not found", "Image error", JOptionPane.OK_OPTION);
+                JOptionPane.showMessageDialog(null, "Image was not found", "Image error", JOptionPane.ERROR_MESSAGE);
+
+                return;
             }
         }
     }

@@ -8,6 +8,13 @@ public class BitmapItemFactory extends SlideItemFactory
     @Override
     public SlideItem initializeItem(String text, int level)
     {
-        return new BitmapItem(level, text);
+        BitmapItem bitmapItem =  new BitmapItem(level, text);
+
+        if (bitmapItem.getBufferedImage() == null)
+        {
+            return null;
+        }
+
+        return bitmapItem;
     }
 }
