@@ -5,8 +5,12 @@ import com.nhl.SlideItem;
 import com.nhl.TextItem;
 import com.nhl.XMLAccessor;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+
+import javax.swing.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
 class SlideItemFactoryTest
 {
@@ -19,9 +23,24 @@ class SlideItemFactoryTest
     }
 
     @Test
-    void createSlideItem_shouldReturnBitmapItem_whenTypeIsImage()
+    void createSlideItem_shouldNotReturnBitmapItem_whenTypeIsImageButImageDoesNotExist()
     {
-        SlideItem item = SlideItemFactory.createSlideItem(new XMLAccessor().getImage(), "Test", 1);
+        try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class))
+        {
+            SlideItem item = SlideItemFactory.createSlideItem(new XMLAccessor().getImage(), "Test", 1);
+
+            mockedJOptionPane.verify(() ->
+                    JOptionPane.showMessageDialog(null, "Image was not found", "Image error", JOptionPane.ERROR_MESSAGE)
+            );
+
+            assertNull(item);
+        }
+    }
+
+    @Test
+    void createSlideItem_shouldReturnBitmapItem_whenTypeIsImageAndImageExists()
+    {
+        SlideItem item = SlideItemFactory.createSlideItem(new XMLAccessor().getImage(), "default-image.jpg", 1);
         assertNotNull(item);
         assertInstanceOf(BitmapItem.class, item);
     }

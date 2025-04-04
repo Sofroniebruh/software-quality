@@ -27,7 +27,8 @@ class SlideTest
     @Test
     void slideItemAction_shouldNotAppendSlideItem_whenTypeIsValidButImageDoesNotExist()
     {
-        try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class)) {
+        try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class))
+        {
             SlideItem item = SlideItemFactory.createSlideItem(new XMLAccessor().getImage(), "Test", 1);
 
             mockedJOptionPane.verify(() ->

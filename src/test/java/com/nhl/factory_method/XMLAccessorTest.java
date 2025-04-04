@@ -47,8 +47,10 @@ class XMLAccessorTest
     }
 
     @Test
-    void slideItemAction_enteredCorrectIMAGETypeAndIncorrectImageName_shouldShowDialogAndNotAddItem() {
-        try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class)) {
+    void slideItemAction_enteredCorrectIMAGETypeAndIncorrectImageName_shouldShowDialogAndNotAddItem()
+    {
+        try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class))
+        {
             this.xmlAccessor.slideItemAction(slide, new XMLAccessor().getImage(), "qwerty", 1);
 
             mockedJOptionPane.verify(() ->
