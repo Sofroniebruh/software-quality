@@ -25,7 +25,7 @@ class SlideTest
     @Test
     void slideItemAction_shouldAppendSlideItem_whenTypeIsValid()
     {
-        SlideItem item = SlideItemFactory.createSlideItem(XMLAccessor.IMAGE);
+        SlideItem item = SlideItemFactory.createSlideItem(new XMLAccessor().getImage(), "Test", 1);
 
         assertNotNull(item);
         slide.append(item);
@@ -36,7 +36,7 @@ class SlideTest
     @Test
     void slideItemAction_shouldNotAppendSlideItem_whenTypeIsInvalid()
     {
-        SlideItem item = SlideItemFactory.createSlideItem("qwerty");
+        SlideItem item = SlideItemFactory.createSlideItem("qwerty", "Test", 1);
 
         assertNull(item);
 

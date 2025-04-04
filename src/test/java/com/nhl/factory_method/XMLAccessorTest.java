@@ -23,7 +23,7 @@ class XMLAccessorTest
     @Test
     void slideItemAction_enteredCorrectTEXTTypeText_shouldAddTextItem()
     {
-        this.xmlAccessor.slideItemAction(this.slide, XMLAccessor.TEXT);
+        this.xmlAccessor.slideItemAction(this.slide, new XMLAccessor().getText(), "Test", 1);
 
         assertFalse(this.slide.getSlideItems().isEmpty());
     }
@@ -31,7 +31,7 @@ class XMLAccessorTest
     @Test
     void slideItemAction_enteredCorrectIMAGEType_shouldAddBitMapItem()
     {
-        this.xmlAccessor.slideItemAction(this.slide, XMLAccessor.IMAGE);
+        this.xmlAccessor.slideItemAction(this.slide, new XMLAccessor().getImage(), "Test", 1);
 
         assertFalse(this.slide.getSlideItems().isEmpty());
     }
@@ -39,7 +39,7 @@ class XMLAccessorTest
     @Test
     void slideItemAction_enteredIncorrectTypeText_shouldNotAddItem()
     {
-        this.xmlAccessor.slideItemAction(this.slide, "qwerty");
+        this.xmlAccessor.slideItemAction(this.slide, "qwerty", "Test", 1);
 
         assertTrue(this.slide.getSlideItems().isEmpty());
     }

@@ -109,10 +109,9 @@ public class XMLAccessor extends Accessor
 
     public void loadSlideItem(Slide slide, Element item)
     {
-        int level = 1; // default
+        int level = 1;
         NamedNodeMap attributes = item.getAttributes();
 
-        // Get level
         String levelText = (attributes.getNamedItem(LEVEL) != null) ? attributes.getNamedItem(LEVEL).getTextContent() : "1";
         try
         {
@@ -123,12 +122,9 @@ public class XMLAccessor extends Accessor
             System.err.println("Invalid level format: " + levelText);
         }
 
-        // Get type (kind)
         String type = (attributes.getNamedItem(KIND) != null) ? attributes.getNamedItem(KIND).getTextContent() : null;
-        // Get the actual text content (the text between <item> tags)
         String text = item.getTextContent().trim();
 
-        // Handle creating the correct slide item
         slideItemAction(slide, type, text, level);
     }
 

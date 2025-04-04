@@ -33,7 +33,6 @@ public class SlideViewerFrame extends JFrame
             }
         });
 
-        // ✅ Add the scrollable component instead
         getContentPane().add(slideViewerComponent.getScrollPane());
 
         addKeyListener(new KeyController(presentation));

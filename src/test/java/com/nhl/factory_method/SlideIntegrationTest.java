@@ -14,7 +14,7 @@ public class SlideIntegrationTest
     void slideItemAction_shouldWorkCorrectly()
     {
         Slide slide = new Slide();
-        SlideItem slideItem = SlideItemFactory.createSlideItem(XMLAccessor.TEXT);
+        SlideItem slideItem = SlideItemFactory.createSlideItem(new XMLAccessor().getText(), "Test", 1);
 
         assertNotNull(slideItem);
         slide.append(slideItem);
