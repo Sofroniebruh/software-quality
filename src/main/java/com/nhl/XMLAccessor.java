@@ -1,4 +1,4 @@
-package com.nhl.factory_method;
+package com.nhl;
 
 import java.util.Vector;
 import java.io.File;
@@ -9,8 +9,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.nhl.Accessor;
-import com.nhl.*;
+import com.nhl.factory_method.SlideItemFactory;
+import com.nhl.observer_pattern.Presentation;
 import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,6 +31,16 @@ public class XMLAccessor extends Accessor
     protected static final String PCE = "Parser Configuration Exception";
     protected static final String UNKNOWNTYPE = "Unknown Element type";
     protected static final String NFE = "Number Format Exception";
+
+    public String getText()
+    {
+        return TEXT;
+    }
+
+    public String getImage()
+    {
+        return IMAGE;
+    }
 
     private String getTitle(Element element, String tagName)
     {
@@ -84,9 +94,9 @@ public class XMLAccessor extends Accessor
         }
     }
 
-    public void slideItemAction(Slide slide, String type)
+    public void slideItemAction(Slide slide, String type, String text, int level)
     {
-        SlideItem slideItem = SlideItemFactory.createSlideItem(type);
+        SlideItem slideItem = SlideItemFactory.createSlideItem(type, text, level);
 
         if (slideItem == null)
         {
@@ -97,26 +107,29 @@ public class XMLAccessor extends Accessor
         slide.append(slideItem);
     }
 
-    protected void loadSlideItem(Slide slide, Element item)
+    public void loadSlideItem(Slide slide, Element item)
     {
         int level = 1; // default
         NamedNodeMap attributes = item.getAttributes();
-        String leveltext = attributes.getNamedItem(LEVEL).getTextContent();
 
-        if (leveltext != null)
+        // Get level
+        String levelText = (attributes.getNamedItem(LEVEL) != null) ? attributes.getNamedItem(LEVEL).getTextContent() : "1";
+        try
         {
-            try
-            {
-                level = Integer.parseInt(leveltext);
-            }
-            catch (NumberFormatException x)
-            {
-                System.err.println(NFE);
-            }
+            level = Integer.parseInt(levelText);
+        }
+        catch (NumberFormatException x)
+        {
+            System.err.println("Invalid level format: " + levelText);
         }
 
-        String type = attributes.getNamedItem(KIND).getTextContent();
-        slideItemAction(slide, type);
+        // Get type (kind)
+        String type = (attributes.getNamedItem(KIND) != null) ? attributes.getNamedItem(KIND).getTextContent() : null;
+        // Get the actual text content (the text between <item> tags)
+        String text = item.getTextContent().trim();
+
+        // Handle creating the correct slide item
+        slideItemAction(slide, type, text, level);
     }
 
     public void saveFile(Presentation presentation, String filename) throws IOException

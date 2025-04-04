@@ -1,4 +1,4 @@
-package com.nhl;
+package com.nhl.command_pattern;
 
 public interface Command
 {

@@ -6,8 +6,8 @@ import com.nhl.TextItem;
 public class TextItemFactory extends SlideItemFactory
 {
     @Override
-    public SlideItem initializeItem()
+    public SlideItem initializeItem(String text, int level)
     {
-        return new TextItem();
+        return new TextItem(level, text);
     }
 }

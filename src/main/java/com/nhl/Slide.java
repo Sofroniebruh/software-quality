@@ -39,7 +39,12 @@ public class Slide
 
     public SlideItem getSlideItem(int number)
     {
-        return items.elementAt(number);
+        if (number < 0 || number >= items.size())
+        {
+            return null;
+        }
+
+        return items.get(number);
     }
 
     public Vector<SlideItem> getSlideItems()
@@ -56,14 +61,18 @@ public class Slide
     {
         float scale = getScale(area);
         int y = area.y;
-        SlideItem slideItem = new TextItem(0, getTitle());
-        Style style = Style.getStyle(slideItem.getLevel());
-        slideItem.draw(area.x, y, scale, g, style, view);
-        y += slideItem.getBoundingBox(g, view, scale, style).height;
-        for (int number = 0; number < getSize(); number++)
+
+        if (title != null && !title.isEmpty())
         {
-            slideItem = (SlideItem) getSlideItems().elementAt(number);
-            style = Style.getStyle(slideItem.getLevel());
+            SlideItem slideItem = new TextItem(0, title);
+            Style style = Style.getStyle(slideItem.getLevel());
+            slideItem.draw(area.x, y, scale, g, style, view);
+            y += slideItem.getBoundingBox(g, view, scale, style).height;
+        }
+
+        for (SlideItem slideItem : items)
+        {
+            Style style = Style.getStyle(slideItem.getLevel());
             slideItem.draw(area.x, y, scale, g, style, view);
             y += slideItem.getBoundingBox(g, view, scale, style).height;
         }

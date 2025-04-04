@@ -1,4 +1,6 @@
-package com.nhl;
+package com.nhl.command_pattern;
+
+import com.nhl.observer_pattern.Presentation;
 
 public class ExitCommand implements Command
 {

@@ -1,6 +1,7 @@
 package com.nhl;
 
-import com.nhl.factory_method.XMLAccessor;
+import com.nhl.command_pattern.*;
+import com.nhl.observer_pattern.Presentation;
 
 import java.awt.MenuBar;
 import java.awt.Frame;
@@ -9,9 +10,6 @@ import java.awt.MenuItem;
 import java.awt.MenuShortcut;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
 
 public class MenuController extends MenuBar
 {
@@ -24,6 +22,7 @@ public class MenuController extends MenuBar
     protected static final String GOTO = "Go to";
     protected static final String HELP = "Help";
     protected static final String NEW = "New";
+    protected static final String EDIT = "Edit";
     protected static final String NEXT = "Next";
     protected static final String OPEN = "Open";
     protected static final String PREV = "Prev";
@@ -52,6 +51,15 @@ public class MenuController extends MenuBar
             public void actionPerformed(ActionEvent actionEvent)
             {
                 newCmd.execute();
+            }
+        });
+        Command editCmd = new EditCommand(presentation, parent);
+        fileMenu.add(menuItem = mkMenuItem(EDIT));
+        menuItem.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                editCmd.execute();
             }
         });
         Command saveCmd = new SaveCommand(presentation, parent);

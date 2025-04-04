@@ -2,6 +2,7 @@ package com.nhl.factory_method;
 
 import com.nhl.Slide;
 import com.nhl.SlideItem;
+import com.nhl.XMLAccessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

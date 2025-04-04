@@ -3,6 +3,8 @@ package com.nhl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.nhl.observer_pattern.Presentation;
+import com.nhl.observer_pattern.PresentationObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

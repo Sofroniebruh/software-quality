@@ -92,6 +92,16 @@ public class Style
         return styles[level];
     }
 
+//    public int getMaxLevel()
+//    {
+//        if (this.styles != null && this.styles.length > 0)
+//        {
+//            return this.styles[this.styles.length - 1].getMaxLevel();
+//        }
+//
+//        return 0;
+//    }
+
     public String toString()
     {
         return "[" + indent + "," + color + "; " + fontSize + " on " + leading + "]";

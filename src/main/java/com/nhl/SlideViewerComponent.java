@@ -1,12 +1,10 @@
 package com.nhl;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
+import com.nhl.observer_pattern.Presentation;
+import com.nhl.observer_pattern.PresentationObserver;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class SlideViewerComponent extends JComponent implements PresentationObserver
 {
@@ -14,25 +12,53 @@ public class SlideViewerComponent extends JComponent implements PresentationObse
     private Presentation presentation;
     private Font labelFont;
     private JFrame frame;
+    private JScrollPane scrollPane;
+
     private static final long serialVersionUID = 227L;
     private static final Color BGCOLOR = Color.white;
     private static final Color COLOR = Color.black;
     private static final String FONTNAME = "Dialog";
     private static final int FONTSTYLE = Font.BOLD;
     private static final int FONTHEIGHT = 10;
-    private static final int XPOS = 1100;
-    private static final int YPOS = 20;
+    private static final int XPOS = 20;
+    private static final int YPOS = 20  ;
 
     public SlideViewerComponent(JFrame frame)
     {
         setBackground(BGCOLOR);
         labelFont = new Font(FONTNAME, FONTSTYLE, FONTHEIGHT);
         this.frame = frame;
+
+        scrollPane = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getViewport().setBackground(BGCOLOR);
+    }
+
+    public JScrollPane getScrollPane()
+    {
+        return scrollPane;
     }
 
     public Dimension getPreferredSize()
     {
-        return new Dimension(Slide.WIDTH, Slide.HEIGHT);
+        return new Dimension(Slide.WIDTH, Math.max(Slide.HEIGHT, getSlideHeight()));
+    }
+
+    private int getSlideHeight()
+    {
+        if (slide == null) return Slide.HEIGHT;
+        int height = YPOS;
+
+        if (slide.getTitle() != null && !slide.getTitle().isEmpty())
+        {
+            height += 50;
+        }
+
+        for (SlideItem item : slide.getSlideItems())
+        {
+            height += 40;
+        }
+
+        return height + 20;
     }
 
     @Override
@@ -40,30 +66,37 @@ public class SlideViewerComponent extends JComponent implements PresentationObse
     {
         this.presentation = presentation;
         this.slide = currentSlide;
+
+        if (slide == null)
+        {
+            System.out.println("Slide is null! Check if currentSlideNumber is valid.");
+        }
+        else
+        {
+            System.out.println("Updated slide: " + slide.getTitle());
+        }
+
+        revalidate();
         repaint();
         frame.setTitle(presentation.getTitle());
     }
 
+    @Override
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
         g.setColor(BGCOLOR);
         g.fillRect(0, 0, getSize().width, getSize().height);
-        if (presentation != null && presentation.getSlideNumber() >= 0)
-        {
-            g.setFont(labelFont);
-            g.setColor(COLOR);
-            g.drawString(
-                    "Slide " + (1 + presentation.getSlideNumber()) + " of " + presentation.getSize(),
-                    XPOS,
-                    YPOS
-            );
-        }
-        if (slide == null)
-        {
-            return;
-        }
-        Rectangle area = new Rectangle(0, YPOS, getWidth(), (getHeight() - YPOS));
+
+        if (presentation == null) return;
+
+        g.setFont(labelFont);
+        g.setColor(COLOR);
+        g.drawString("Slide " + (1 + presentation.getSlideNumber()) + " of " + presentation.getSize(), XPOS, YPOS);
+
+        if (slide == null) return;
+
+        Rectangle area = new Rectangle(XPOS, YPOS + 20, getWidth(), getHeight());
         slide.draw(g, area, this);
     }
 }

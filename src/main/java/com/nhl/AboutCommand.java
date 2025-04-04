@@ -1,5 +1,7 @@
 package com.nhl;
 
+import com.nhl.command_pattern.Command;
+
 import java.awt.Frame;
 
 public class AboutCommand implements Command

@@ -1,9 +1,11 @@
 package com.nhl;
 
+import com.nhl.observer_pattern.Presentation;
+
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class SlideViewerFrame extends JFrame
 {
@@ -30,7 +32,10 @@ public class SlideViewerFrame extends JFrame
                 System.exit(0);
             }
         });
-        getContentPane().add(slideViewerComponent);
+
+        // ✅ Add the scrollable component instead
+        getContentPane().add(slideViewerComponent.getScrollPane());
+
         addKeyListener(new KeyController(presentation));
         setMenuBar(new MenuController(this, presentation));
         setSize(new Dimension(WIDTH, HEIGHT));

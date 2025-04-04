@@ -1,72 +1,71 @@
-package com.nhl;
+package com.nhl.command_pattern;
 
-import com.nhl.command_pattern.Command;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+
 import com.nhl.observer_pattern.Presentation;
+import com.nhl.Slide;
+import com.nhl.XMLAccessor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
-import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.io.IOException;
 
-public class OpenCommand implements Command
+public class NewCommand implements Command
 {
     private Presentation presentation;
     private Frame parent;
-    public static final String TESTFILE = "test.xml";
-    public static final String IOEX = "IO Exception: ";
-    public static final String LOADERR = "Load Error";
 
-    public OpenCommand(Presentation presentation, Frame parent)
+    public NewCommand(Presentation presentation, Frame parent)
     {
         this.presentation = presentation;
-        this.parent = parent;
-    }
-
-    public Presentation getPresentation()
-    {
-        return presentation;
-    }
-
-    public void setPresentation(Presentation presentation)
-    {
-        this.presentation = presentation;
-    }
-
-    public Frame getParent()
-    {
-        return parent;
-    }
-
-    public void setParent(Frame parent)
-    {
         this.parent = parent;
     }
 
     @Override
     public void execute()
     {
-        FileDialog fileDialog = new FileDialog(parent, "Open Presentation", FileDialog.LOAD);
-        fileDialog.setVisible(true);
+        int choice = JOptionPane.showOptionDialog(
+                parent,
+                "Do you want to create a new blank presentation or open an existing one?",
+                "New Presentation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new String[] {"Blank", "Open File"},
+                "Blank"
+        );
 
-        String fileDir = fileDialog.getDirectory();
-        String fileName = fileDialog.getFile();
-
-        if (fileDir != null && fileName != null)
+        if (choice == JOptionPane.YES_OPTION)
         {
-            try
+            presentation.clear();
+            presentation.append(new Slide());
+        }
+        else if (choice == JOptionPane.NO_OPTION)
+        {
+            FileDialog fileDialog = new FileDialog(parent, "Open Presentation", FileDialog.LOAD);
+            fileDialog.setVisible(true);
+
+            String fileDir = fileDialog.getDirectory();
+            String fileName = fileDialog.getFile();
+
+            if (fileDir != null && fileName != null)
             {
-                File file = new File(fileDir, fileName);
-                loadPresentationFromXML(file);
-            }
-            catch (Exception e)
-            {
-                JOptionPane.showMessageDialog(parent, "Error loading file: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                try
+                {
+                    File file = new File(fileDir, fileName);
+                    loadPresentationFromXML(file);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(parent, "Error loading file: " + e.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
 

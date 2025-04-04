@@ -1,6 +1,8 @@
-package com.nhl;
+package com.nhl.command_pattern;
 
-import com.nhl.factory_method.XMLAccessor;
+import com.nhl.Accessor;
+import com.nhl.observer_pattern.Presentation;
+import com.nhl.XMLAccessor;
 
 import java.awt.Frame;
 import javax.swing.JOptionPane;

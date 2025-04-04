@@ -1,5 +1,9 @@
 package com.nhl;
 
+import com.nhl.command_pattern.GoToCommand;
+import com.nhl.command_pattern.NextSlideCommand;
+import com.nhl.command_pattern.PrevSlideCommand;
+import com.nhl.observer_pattern.Presentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

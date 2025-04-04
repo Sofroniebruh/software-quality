@@ -1,10 +1,12 @@
-package com.nhl;
+package com.nhl.command_pattern;
 
-public class PrevSlideCommand implements Command
+import com.nhl.observer_pattern.Presentation;
+
+public class NextSlideCommand implements Command
 {
     private Presentation presentation;
 
-    public PrevSlideCommand(Presentation presentation)
+    public NextSlideCommand(Presentation presentation)
     {
         this.presentation = presentation;
     }
@@ -22,12 +24,12 @@ public class PrevSlideCommand implements Command
     @Override
     public void execute()
     {
-        presentation.prevSlide();
+        presentation.nextSlide();
     }
 
     @Override
     public void undo()
     {
-        presentation.nextSlide();
+        presentation.prevSlide();
     }
 }
