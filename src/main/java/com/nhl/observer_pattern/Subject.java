@@ -1,6 +1,4 @@
-package com.nhl;
-
-import com.nhl.observer_pattern.PresentationObserver;
+package com.nhl.observer_pattern;
 
 public interface Subject
 {

@@ -45,16 +45,33 @@ public class SaveCommand implements Command
     @Override
     public void execute()
     {
+        String filename = dialog();
         Accessor xmlAccessor = new XMLAccessor();
+
         try
         {
-            xmlAccessor.saveFile(presentation, SAVEFILE);
+            xmlAccessor.saveFile(presentation, filename + ".xml");
         }
         catch (IOException exc)
         {
             JOptionPane.showMessageDialog(parent, IOEX + exc, SAVEERR, JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public String dialog()
+    {
+        String filename = JOptionPane.showInputDialog("Enter the filename");
+
+        if (filename == null || filename.isEmpty())
+        {
+            filename = SAVEFILE;
+
+            return filename;
+        }
+
+        return filename;
+    }
+
 
     @Override
     public void undo()

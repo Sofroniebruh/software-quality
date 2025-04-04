@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE presentation SYSTEM "jabberpoint.dtd">
+<presentation>
+<showtitle>Demo Presentation</showtitle>
+<slide>
+<title></title>
+<item kind="text" level="1">Very interesting text!</item>
+<item kind="image" level="1">default-image.jpg</item>
+</slide>
+</presentation>

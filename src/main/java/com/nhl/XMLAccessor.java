@@ -130,48 +130,63 @@ public class XMLAccessor extends Accessor
 
     public void saveFile(Presentation presentation, String filename) throws IOException
     {
-        PrintWriter out = new PrintWriter(new FileWriter(filename));
-        out.println("<?xml version=\"1.0\"?>");
-        out.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");
-        out.println("<presentation>");
-        out.print("<showtitle>");
-        out.print(presentation.getTitle());
-        out.println("</showtitle>");
-
-        for (int slideNumber = 0; slideNumber < presentation.getSize(); slideNumber++)
+        try (PrintWriter out = new PrintWriter(new FileWriter(filename)))
         {
-            Slide slide = presentation.getSlide(slideNumber);
-            out.println("<slide>");
-            out.println("<title>" + slide.getTitle() + "</title>");
-            Vector<SlideItem> slideItems = slide.getSlideItems();
+            out.println("<?xml version=\"1.0\"?>");
+            out.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");
+            out.println("<presentation>");
 
-            for (int itemNumber = 0; itemNumber < slideItems.size(); itemNumber++)
+            out.print("<showtitle>");
+            escapeAndPrint(out, presentation.getTitle());
+            out.println("</showtitle>");
+
+            for (int slideNumber = 0; slideNumber < presentation.getSize(); slideNumber++)
             {
-                SlideItem slideItem = (SlideItem) slideItems.elementAt(itemNumber);
-                out.print("<item kind=");
+                Slide slide = presentation.getSlide(slideNumber);
+                out.println("<slide>");
+                out.print("<title>");
+                escapeAndPrint(out, slide.getTitle());
+                out.println("</title>");
 
-                if (slideItem instanceof TextItem)
+                Vector<SlideItem> slideItems = slide.getSlideItems();
+                for (SlideItem slideItem : slideItems)
                 {
-                    out.print("\"text\" level=\"" + slideItem.getLevel() + "\">");
-                    out.print(((TextItem) slideItem).getText());
-                }
-                else
-                {
-                    if (slideItem instanceof BitmapItem)
+                    out.print("<item kind=");
+
+                    if (slideItem instanceof TextItem)
+                    {
+                        out.print("\"text\" level=\"" + slideItem.getLevel() + "\">");
+                        escapeAndPrint(out, ((TextItem) slideItem).getText());
+                    }
+                    else if (slideItem instanceof BitmapItem)
                     {
                         out.print("\"image\" level=\"" + slideItem.getLevel() + "\">");
-                        out.print(((BitmapItem) slideItem).getName());
+                        escapeAndPrint(out, ((BitmapItem) slideItem).getName());
                     }
                     else
                     {
                         System.out.println("Ignoring " + slideItem);
                     }
+
+                    out.println("</item>");
                 }
-                out.println("</item>");
+
+                out.println("</slide>");
             }
-            out.println("</slide>");
+
+            out.println("</presentation>");
         }
-        out.println("</presentation>");
-        out.close();
+    }
+
+    private void escapeAndPrint(PrintWriter out, String text)
+    {
+        if (text != null)
+        {
+            out.print(text.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&apos;"));
+        }
     }
 }
