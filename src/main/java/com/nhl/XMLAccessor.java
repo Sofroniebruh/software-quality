@@ -96,13 +96,6 @@ public class XMLAccessor extends Accessor
 
     public void slideItemAction(Slide slide, String type, String text, int level)
     {
-        if (level < 0 || level > Style.styles.length)
-        {
-            System.err.println("Error: Invalid level " + level + ". Must be between 0 and " + (Style.styles.length - 1));
-
-            return;
-        }
-
         SlideItem slideItem = SlideItemFactory.createSlideItem(type, text, level);
 
         if (slideItem == null)

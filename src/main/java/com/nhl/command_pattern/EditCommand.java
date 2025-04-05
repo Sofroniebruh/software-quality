@@ -60,7 +60,8 @@ public class EditCommand implements Command
 
                 if (levelInt < 0 || levelInt > Style.styles.length)
                 {
-                    System.err.println("Error: Invalid level " + level + ". Must be between 0 and " + (Style.styles.length - 1));
+                    dialog("Invalid level " + levelInt + ". Must be between 0 and " + (Style.styles.length) + ". Do you want to retry?", "Out of bounds");
+
                     return;
                 }
 
@@ -71,18 +72,18 @@ public class EditCommand implements Command
             }
             catch (NumberFormatException e)
             {
-                dialog();
+                dialog("Invalid values provided. Do you want to retry?", "Invalid values");
             }
         }
         else
         {
-            dialog();
+            dialog("Invalid values provided. Do you want to retry?", "Invalid values");
         }
     }
 
-    public void dialog()
+    public void dialog(String text, String title)
     {
-        int result = JOptionPane.showConfirmDialog(null, "Invalid values provided. Do you want to retry?", "Invalid values", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, text, title, JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION)
         {
