@@ -1,5 +1,6 @@
 package com.nhl.command_pattern;
 
+import com.nhl.Style;
 import com.nhl.observer_pattern.Presentation;
 import com.nhl.SlideItem;
 import com.nhl.XMLAccessor;
@@ -49,12 +50,20 @@ public class EditCommand implements Command
     private void addItem(String type)
     {
         String text = JOptionPane.showInputDialog("Enter text: ");
-        String level = JOptionPane.showInputDialog("Enter level: ");
+        String level = JOptionPane.showInputDialog("Enter level from 1 to " + Style.styles.length + ": ");
 
         if (text != null && !text.trim().isEmpty() && level != null && !level.trim().isEmpty())
         {
             try
             {
+                int levelInt = Integer.parseInt(level);
+
+                if (levelInt < 0 || levelInt > Style.styles.length)
+                {
+                    System.err.println("Error: Invalid level " + level + ". Must be between 0 and " + (Style.styles.length - 1));
+                    return;
+                }
+
                 SlideItem slideItem = SlideItemFactory.createSlideItem(type, text, Integer.parseInt(level));
 
                 this.presentation.getCurrentSlide().append(slideItem);
