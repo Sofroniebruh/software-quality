@@ -14,7 +14,7 @@ public class ExitCommand implements Command
 
     public Presentation getPresentation()
     {
-        return presentation;
+        return this.presentation;
     }
 
     public void setPresentation(Presentation presentation)

@@ -13,7 +13,7 @@ public class PrevSlideCommand implements Command
 
     public Presentation getPresentation()
     {
-        return presentation;
+        return this.presentation;
     }
 
     public void setPresentation(Presentation presentation)
@@ -24,7 +24,7 @@ public class PrevSlideCommand implements Command
     @Override
     public boolean execute()
     {
-        presentation.prevSlide();
+        this.presentation.prevSlide();
 
         return true;
     }
@@ -32,7 +32,7 @@ public class PrevSlideCommand implements Command
     @Override
     public boolean undo()
     {
-        presentation.nextSlide();
+        this.presentation.nextSlide();
 
         return true;
     }

@@ -5,7 +5,7 @@ import com.nhl.observer_pattern.Presentation;
 
 public class AddNewSlideCommand implements Command
 {
-    private Presentation presentation;
+    private final Presentation presentation;
     private int slideIndex;
 
     public AddNewSlideCommand(Presentation presentation)
@@ -19,8 +19,8 @@ public class AddNewSlideCommand implements Command
         Slide newSlide = new Slide();
         newSlide.setTitle("New Slide");
 
-        presentation.append(newSlide);
-        slideIndex = presentation.getSize() - 1;
+        this.presentation.append(newSlide);
+        this.slideIndex = this.presentation.getSize() - 1;
 
         return true;
     }
@@ -28,7 +28,7 @@ public class AddNewSlideCommand implements Command
     @Override
     public boolean undo()
     {
-        return presentation.removeSlide(slideIndex);
+        return this.presentation.removeSlide(this.slideIndex);
     }
 
     @Override

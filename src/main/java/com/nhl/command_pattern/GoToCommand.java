@@ -18,7 +18,7 @@ public class GoToCommand implements Command
 
     public Presentation getPresentation()
     {
-        return presentation;
+        return this.presentation;
     }
 
     public void setPresentation(Presentation presentation)
@@ -29,26 +29,26 @@ public class GoToCommand implements Command
     @Override
     public boolean execute()
     {
-        previousSlideNumber = presentation.getSlideNumber();
+        this.previousSlideNumber = this.presentation.getSlideNumber();
         String pageNumberStr = JOptionPane.showInputDialog(PAGENR);
 
         try
         {
             int pageNumber = Integer.parseInt(pageNumberStr);
-            presentation.setSlideNumber(pageNumber - 1);
+            this.presentation.setSlideNumber(pageNumber - 1);
 
             return true;
         }
         catch (NumberFormatException ex)
         {
-            return dialog();
+            return this.dialog();
         }
     }
 
     @Override
     public boolean undo()
     {
-        presentation.setSlideNumber(previousSlideNumber);
+        this.presentation.setSlideNumber(this.previousSlideNumber);
 
         return true;
     }
@@ -68,7 +68,7 @@ public class GoToCommand implements Command
 
         if (result == JOptionPane.YES_OPTION)
         {
-            return execute();
+            return this.execute();
         }
 
         return false;

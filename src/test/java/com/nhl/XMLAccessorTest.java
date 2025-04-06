@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class XMLAccessorTest
 {
-
     private XMLAccessor accessor;
     private Presentation presentation;
 

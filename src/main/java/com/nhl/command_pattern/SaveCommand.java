@@ -15,19 +15,26 @@ public class SaveCommand implements Command
     private Frame parent;
     private String savedFilename;
     private String previousContent;
+    private final XMLAccessor xmlAccessor;
     public static final String SAVEFILE = "dump.xml";
     public static final String IOEX = "IO Exception: ";
     public static final String SAVEERR = "Save Error";
 
     public SaveCommand(Presentation presentation, Frame parent)
     {
+        this(presentation, parent, new XMLAccessor());
+    }
+
+    public SaveCommand(Presentation presentation, Frame parent, XMLAccessor xmlAccessor)
+    {
         this.presentation = presentation;
         this.parent = parent;
+        this.xmlAccessor = xmlAccessor;
     }
 
     public Presentation getPresentation()
     {
-        return presentation;
+        return this.presentation;
     }
 
     public void setPresentation(Presentation presentation)
@@ -37,7 +44,7 @@ public class SaveCommand implements Command
 
     public Frame getParent()
     {
-        return parent;
+        return this.parent;
     }
 
     public void setParent(Frame parent)
@@ -48,32 +55,31 @@ public class SaveCommand implements Command
     @Override
     public boolean execute()
     {
-        String filename = dialog();
+        String filename = this.dialog();
 
         if (filename == null)
         {
             return false;
         }
 
-        savedFilename = filename + ".xml";
-        Accessor xmlAccessor = new XMLAccessor();
+        this.savedFilename = filename + ".xml";
 
         try
         {
-            File file = new File(savedFilename);
+            File file = new File(this.savedFilename);
 
             if (file.exists())
             {
-                previousContent = new String(java.nio.file.Files.readAllBytes(file.toPath()));
+                this.previousContent = new String(java.nio.file.Files.readAllBytes(file.toPath()));
             }
 
-            xmlAccessor.saveFile(presentation, savedFilename);
+            this.xmlAccessor.saveFile(this.presentation, this.savedFilename);
 
             return true;
         }
         catch (IOException exc)
         {
-            JOptionPane.showMessageDialog(parent, IOEX + exc, SAVEERR, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.parent, IOEX + exc, SAVEERR, JOptionPane.ERROR_MESSAGE);
 
             return false;
         }
@@ -82,20 +88,20 @@ public class SaveCommand implements Command
     @Override
     public boolean undo()
     {
-        if (previousContent != null && savedFilename != null)
+        if (this.previousContent != null && this.savedFilename != null)
         {
             try
             {
                 java.nio.file.Files.write(
-                        new File(savedFilename).toPath(),
-                        previousContent.getBytes()
+                        new File(this.savedFilename).toPath(),
+                        this.previousContent.getBytes()
                 );
 
                 return true;
             }
             catch (IOException exc)
             {
-                JOptionPane.showMessageDialog(parent,
+                JOptionPane.showMessageDialog(this.parent,
                         "Failed to undo save: " + exc.getMessage(),
                         "Undo Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -117,9 +123,14 @@ public class SaveCommand implements Command
     {
         String filename = JOptionPane.showInputDialog("Enter the filename");
 
-        if (filename == null || filename.isEmpty())
+        if (filename == null)
         {
-            filename = SAVEFILE;
+            return null;
+        }
+
+        if (filename.isEmpty())
+        {
+            return SAVEFILE;
         }
 
         return filename;

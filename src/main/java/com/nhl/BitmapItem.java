@@ -42,7 +42,7 @@ public class BitmapItem extends SlideItem
 
     public String getName()
     {
-        return imageName;
+        return this.imageName;
     }
 
     public void setName(String imageName)
@@ -53,7 +53,7 @@ public class BitmapItem extends SlideItem
 
     public BufferedImage getBufferedImage()
     {
-        return bufferedImage;
+        return this.bufferedImage;
     }
 
     public void setBufferedImage(BufferedImage bufferedImage)
@@ -63,34 +63,34 @@ public class BitmapItem extends SlideItem
 
     public Rectangle getBoundingBox(Graphics g, ImageObserver observer, float scale, Style myStyle)
     {
-        if (bufferedImage == null)
+        if (this.bufferedImage == null)
         {
             return new Rectangle(0, 0, 0, 0);
         }
 
         return new Rectangle(
-                (int) (myStyle.indent * scale),
+                (int) (myStyle.getIndent() * scale),
                 0,
-                (int) (bufferedImage.getWidth(observer) * scale),
-                ((int) (myStyle.leading * scale)) + (int) (bufferedImage.getHeight(observer) * scale)
+                (int) (this.bufferedImage.getWidth(observer) * scale),
+                ((int) (myStyle.getLeading() * scale)) + (int) (this.bufferedImage.getHeight(observer) * scale)
         );
     }
 
     public void draw(int x, int y, float scale, Graphics g, Style myStyle, ImageObserver observer)
     {
-        if (bufferedImage == null)
+        if (this.bufferedImage == null)
         {
             System.err.println("Cannot draw: Image is null.");
             return;
         }
-        int width = x + (int) (myStyle.indent * scale);
-        int height = y + (int) (myStyle.leading * scale);
+        int width = x + (int) (myStyle.getIndent() * scale);
+        int height = y + (int) (myStyle.getLeading() * scale);
         g.drawImage(
-                bufferedImage,
+                this.bufferedImage,
                 width,
                 height,
-                (int) (bufferedImage.getWidth(observer) * scale),
-                (int) (bufferedImage.getHeight(observer) * scale),
+                (int) (this.bufferedImage.getWidth(observer) * scale),
+                (int) (this.bufferedImage.getHeight(observer) * scale),
                 observer
         );
     }
@@ -98,6 +98,6 @@ public class BitmapItem extends SlideItem
     @Override
     public String toString()
     {
-        return String.format("BitmapItem[level=%d, image='%s']", getLevel(), imageName);
+        return String.format("BitmapItem[level=%d, image='%s']", this.getLevel(), this.imageName);
     }
 }

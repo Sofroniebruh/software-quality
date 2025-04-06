@@ -13,7 +13,6 @@ import static org.mockito.Mockito.*;
 
 class PresentationTest
 {
-
     private Presentation presentation;
 
     @Mock

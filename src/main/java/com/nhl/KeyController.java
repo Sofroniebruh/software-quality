@@ -17,14 +17,14 @@ public class KeyController extends KeyAdapter
 
     public KeyController(Presentation presentation)
     {
-        nextSlideCommand = new NextSlideCommand(presentation);
-        prevSlideCommand = new PrevSlideCommand(presentation);
-        exitCommand = new ExitCommand(presentation);
+        this.nextSlideCommand = new NextSlideCommand(presentation);
+        this.prevSlideCommand = new PrevSlideCommand(presentation);
+        this.exitCommand = new ExitCommand(presentation);
     }
 
     public Command getNextSlideCommand()
     {
-        return nextSlideCommand;
+        return this.nextSlideCommand;
     }
 
     public void setNextSlideCommand(Command nextSlideCommand)
@@ -34,7 +34,7 @@ public class KeyController extends KeyAdapter
 
     public Command getPrevSlideCommand()
     {
-        return prevSlideCommand;
+        return this.prevSlideCommand;
     }
 
     public void setPrevSlideCommand(Command prevSlideCommand)
@@ -44,7 +44,7 @@ public class KeyController extends KeyAdapter
 
     public Command getExitCommand()
     {
-        return exitCommand;
+        return this.exitCommand;
     }
 
     public void setExitCommand(Command exitCommand)
@@ -60,16 +60,16 @@ public class KeyController extends KeyAdapter
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_ENTER:
             case '+':
-                nextSlideCommand.execute();
+                this.nextSlideCommand.execute();
                 break;
             case KeyEvent.VK_PAGE_UP:
             case KeyEvent.VK_UP:
             case '-':
-                prevSlideCommand.execute();
+                this.prevSlideCommand.execute();
                 break;
             case 'q':
             case 'Q':
-                exitCommand.execute();
+                this.exitCommand.execute();
                 break;
             default:
                 break;

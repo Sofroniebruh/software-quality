@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SlideTest
 {
-
     private Slide slide;
 
     @BeforeEach
@@ -22,7 +21,7 @@ class SlideTest
     void constructor_whenCalled_shouldInitializeEmptySlide()
     {
         assertNotNull(slide);
-        assertEquals(null, slide.getTitle());
+        assertNull(slide.getTitle());
         assertTrue(slide.getSlideItems().isEmpty());
     }
 
@@ -46,7 +45,7 @@ class SlideTest
         SlideItem addedItem = slide.getSlideItem(0);
 
         assertNotNull(addedItem);
-        assertTrue(addedItem instanceof TextItem);
+        assertInstanceOf(TextItem.class, addedItem);
         assertEquals(itemText, ((TextItem) addedItem).getText());
     }
 
@@ -67,7 +66,7 @@ class SlideTest
             SlideItem slideItem = slide.getSlideItem(i);
 
             assertNotNull(slideItem);
-            assertTrue(slideItem instanceof TextItem);
+            assertInstanceOf(TextItem.class, slideItem);
             assertEquals(items[i], ((TextItem) slideItem).getText());
         }
     }

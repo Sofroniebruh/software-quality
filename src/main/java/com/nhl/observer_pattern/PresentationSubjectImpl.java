@@ -7,27 +7,27 @@ import java.util.List;
 
 public class PresentationSubjectImpl implements PresentationSubject
 {
-    private List<PresentationObserver> observers = new ArrayList<>();
+    private final List<PresentationObserver> observers = new ArrayList<>();
 
     @Override
     public void registerObserver(PresentationObserver observer)
     {
-        if (!observers.contains(observer))
+        if (!this.observers.contains(observer))
         {
-            observers.add(observer);
+            this.observers.add(observer);
         }
     }
 
     @Override
     public void unregisterObserver(PresentationObserver observer)
     {
-        observers.remove(observer);
+        this.observers.remove(observer);
     }
 
     @Override
     public void notifyObservers(Presentation presentation, Slide currentSlide)
     {
-        for (PresentationObserver observer : observers)
+        for (PresentationObserver observer : this.observers)
         {
             observer.update(presentation, currentSlide);
         }
@@ -36,6 +36,6 @@ public class PresentationSubjectImpl implements PresentationSubject
     @Override
     public List<PresentationObserver> getObservers()
     {
-        return observers;
+        return this.observers;
     }
 } 

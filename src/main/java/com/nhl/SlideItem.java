@@ -21,7 +21,7 @@ public abstract class SlideItem
 
     public int getLevel()
     {
-        return level;
+        return this.level;
     }
 
     public abstract Rectangle getBoundingBox(Graphics g,

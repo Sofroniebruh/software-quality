@@ -10,7 +10,7 @@ import java.util.List;
 public class Presentation implements ISlideManager, INavigation
 {
     private String showTitle;
-    private ArrayList<Slide> showList = new ArrayList<>();
+    private final ArrayList<Slide> showList = new ArrayList<>();
     private int currentSlideNumber = 0;
     private final PresentationSubject subject;
     private final IUIInteraction uiInteraction;
@@ -37,74 +37,74 @@ public class Presentation implements ISlideManager, INavigation
     @Override
     public int getSize()
     {
-        return showList.size();
+        return this.showList.size();
     }
 
     @Override
     public String getTitle()
     {
-        return showTitle;
+        return this.showTitle;
     }
 
     @Override
     public void setTitle(String title)
     {
-        showTitle = title;
-        notifyObservers();
+        this.showTitle = title;
+        this.notifyObservers();
     }
 
     @Override
     public Slide getSlide(int number)
     {
-        if (number < 0 || number >= getSize())
+        if (number < 0 || number >= this.getSize())
         {
             return null;
         }
 
-        return showList.get(number);
+        return this.showList.get(number);
     }
 
     @Override
     public Slide getCurrentSlide()
     {
-        return getSlide(currentSlideNumber);
+        return this.getSlide(this.currentSlideNumber);
     }
 
     @Override
     public void append(Slide slide)
     {
-        showList.add(slide);
-        if (currentSlideNumber == -1)
+        this.showList.add(slide);
+        if (this.currentSlideNumber == -1)
         {
-            setSlideNumber(0);
+            this.setSlideNumber(0);
         }
-        notifyObservers();
+        this.notifyObservers();
     }
 
     @Override
     public void clear()
     {
-        setSlideNumber(0);
+        this.setSlideNumber(0);
         this.showList.clear();
-        notifyObservers();
+        this.notifyObservers();
     }
 
     @Override
     public boolean removeSlide(int index)
     {
-        if (index < 0 || index >= showList.size())
+        if (index < 0 || index >= this.showList.size())
         {
             return false;
         }
 
-        showList.remove(index);
+        this.showList.remove(index);
 
-        if (currentSlideNumber >= showList.size())
+        if (this.currentSlideNumber >= this.showList.size())
         {
-            setSlideNumber(Math.max(0, showList.size() - 1));
+            this.setSlideNumber(Math.max(0, this.showList.size() - 1));
         }
 
-        notifyObservers();
+        this.notifyObservers();
 
         return true;
     }
@@ -112,7 +112,7 @@ public class Presentation implements ISlideManager, INavigation
     @Override
     public int getSlideNumber()
     {
-        return currentSlideNumber;
+        return this.currentSlideNumber;
     }
 
     @Override
@@ -120,29 +120,29 @@ public class Presentation implements ISlideManager, INavigation
     {
         System.out.println("Page number: " + number);
 
-        if (showList.isEmpty())
+        if (this.showList.isEmpty())
         {
-            currentSlideNumber = 0;
-            notifyObservers();
+            this.currentSlideNumber = 0;
+            this.notifyObservers();
 
             return;
         }
 
-        if (number >= 0 && number < showList.size())
+        if (number >= 0 && number < this.showList.size())
         {
-            currentSlideNumber = number;
-            notifyObservers();
+            this.currentSlideNumber = number;
+            this.notifyObservers();
         }
         else
         {
-            errorHandler.handleInvalidSlideNumber(number, 0, showList.size() - 1);
+            this.errorHandler.handleInvalidSlideNumber(number, 0, this.showList.size() - 1);
             if (number < 0)
             {
-                setSlideNumber(0);
+                this.setSlideNumber(0);
             }
-            else if (number >= showList.size())
+            else if (number >= this.showList.size())
             {
-                setSlideNumber(showList.size() - 1);
+                this.setSlideNumber(this.showList.size() - 1);
             }
         }
     }
@@ -150,13 +150,13 @@ public class Presentation implements ISlideManager, INavigation
     @Override
     public void nextSlide()
     {
-        if (currentSlideNumber < (showList.size() - 1))
+        if (this.currentSlideNumber < (this.showList.size() - 1))
         {
-            setSlideNumber(currentSlideNumber + 1);
+            this.setSlideNumber(this.currentSlideNumber + 1);
         }
         else
         {
-            uiInteraction.showMessage("You've reached the end of the presentation",
+            this.uiInteraction.showMessage("You've reached the end of the presentation",
                     "End of the presentation",
                     JOptionPane.OK_OPTION);
         }
@@ -165,13 +165,13 @@ public class Presentation implements ISlideManager, INavigation
     @Override
     public void prevSlide()
     {
-        if (currentSlideNumber > 0)
+        if (this.currentSlideNumber > 0)
         {
-            setSlideNumber(currentSlideNumber - 1);
+            this.setSlideNumber(this.currentSlideNumber - 1);
         }
         else
         {
-            uiInteraction.showMessage("You've reached the start of the presentation",
+            this.uiInteraction.showMessage("You've reached the start of the presentation",
                     "Start of the presentation",
                     JOptionPane.OK_OPTION);
         }
@@ -179,17 +179,17 @@ public class Presentation implements ISlideManager, INavigation
 
     public void registerObserver(PresentationObserver observer)
     {
-        subject.registerObserver(observer);
+        this.subject.registerObserver(observer);
     }
 
     public void unregisterObserver(PresentationObserver observer)
     {
-        subject.unregisterObserver(observer);
+        this.subject.unregisterObserver(observer);
     }
 
     private void notifyObservers()
     {
-        subject.notifyObservers(this, getCurrentSlide());
+        this.subject.notifyObservers(this, this.getCurrentSlide());
     }
 
     public void exit(int n)
@@ -199,6 +199,6 @@ public class Presentation implements ISlideManager, INavigation
 
     public List<PresentationObserver> getObservers()
     {
-        return subject.getObservers();
+        return this.subject.getObservers();
     }
 }

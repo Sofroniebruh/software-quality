@@ -4,8 +4,8 @@ import java.util.Stack;
 
 public class CommandInvoker
 {
-    private Stack<Command> commandHistory;
-    private Stack<Command> redoStack;
+    private final Stack<Command> commandHistory;
+    private final Stack<Command> redoStack;
 
     public CommandInvoker()
     {
@@ -16,37 +16,37 @@ public class CommandInvoker
     public void executeCommand(Command command)
     {
         command.execute();
-        commandHistory.push(command);
-        redoStack.clear();
+        this.commandHistory.push(command);
+        this.redoStack.clear();
     }
 
     public void undo()
     {
-        if (!commandHistory.isEmpty())
+        if (!this.commandHistory.isEmpty())
         {
-            Command command = commandHistory.pop();
+            Command command = this.commandHistory.pop();
             command.undo();
-            redoStack.push(command);
+            this.redoStack.push(command);
         }
     }
 
     public void redo()
     {
-        if (!redoStack.isEmpty())
+        if (!this.redoStack.isEmpty())
         {
-            Command command = redoStack.pop();
+            Command command = this.redoStack.pop();
             command.execute();
-            commandHistory.push(command);
+            this.commandHistory.push(command);
         }
     }
 
     public boolean canUndo()
     {
-        return !commandHistory.isEmpty();
+        return !this.commandHistory.isEmpty();
     }
 
     public boolean canRedo()
     {
-        return !redoStack.isEmpty();
+        return !this.redoStack.isEmpty();
     }
 } 

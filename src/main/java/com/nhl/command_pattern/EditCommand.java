@@ -10,9 +10,9 @@ import java.awt.*;
 
 public class EditCommand implements Command
 {
-    private Presentation presentation;
-    private Frame parent;
-    private XMLAccessor accessor;
+    private final Presentation presentation;
+    private final Frame parent;
+    private final XMLAccessor accessor;
     private SlideItem addedItem;
     private int addedItemIndex;
 
@@ -40,11 +40,11 @@ public class EditCommand implements Command
 
         if (choice == 0)
         {
-            return addItem(this.accessor.getText());
+            return this.addItem(this.accessor.getText());
         }
         else if (choice == 1)
         {
-            return addItem(this.accessor.getImage());
+            return this.addItem(this.accessor.getImage());
         }
 
         return false;
@@ -53,10 +53,10 @@ public class EditCommand implements Command
     @Override
     public boolean undo()
     {
-        if (addedItem != null && presentation.getCurrentSlide() != null)
+        if (this.addedItem != null && this.presentation.getCurrentSlide() != null)
         {
-            presentation.getCurrentSlide().removeItem(addedItemIndex);
-            parent.repaint();
+            this.presentation.getCurrentSlide().removeItem(this.addedItemIndex);
+            this.parent.repaint();
 
             return true;
         }
@@ -72,9 +72,9 @@ public class EditCommand implements Command
 
     private boolean addItem(String type)
     {
-        if (presentation.getCurrentSlide() == null)
+        if (this.presentation.getCurrentSlide() == null)
         {
-            JOptionPane.showMessageDialog(parent,
+            JOptionPane.showMessageDialog(this.parent,
                     "Please select a slide first",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -106,10 +106,10 @@ public class EditCommand implements Command
             level = Integer.parseInt(levels[levelChoice]);
         }
 
-        addedItem = SlideItemFactory.createSlideItem(type, text, level);
-        if (addedItem == null)
+        this.addedItem = SlideItemFactory.createSlideItem(type, text, level);
+        if (this.addedItem == null)
         {
-            JOptionPane.showMessageDialog(parent,
+            JOptionPane.showMessageDialog(this.parent,
                     "Error: Unknown type '" + type + "'. Cannot create SlideItem.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -117,9 +117,9 @@ public class EditCommand implements Command
             return false;
         }
 
-        addedItemIndex = presentation.getCurrentSlide().getSlideItems().size();
-        presentation.getCurrentSlide().append(addedItem);
-        parent.repaint();
+        this.addedItemIndex = this.presentation.getCurrentSlide().getSlideItems().size();
+        this.presentation.getCurrentSlide().append(this.addedItem);
+        this.parent.repaint();
 
         return true;
     }
