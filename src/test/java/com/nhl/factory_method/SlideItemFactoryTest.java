@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mockStatic;
 class SlideItemFactoryTest
 {
     @Test
-    void createSlideItem_shouldReturnTextItem_whenTypeIsText()
+    void createSlideItem_whenTypeIsText_shouldReturnTextItem()
     {
         SlideItem item = SlideItemFactory.createSlideItem(new XMLAccessor().getText(), "Test", 1);
         assertNotNull(item);
@@ -23,7 +23,7 @@ class SlideItemFactoryTest
     }
 
     @Test
-    void createSlideItem_shouldNotReturnBitmapItem_whenTypeIsImageButImageDoesNotExist()
+    void createSlideItem_whenTypeIsImageAndImageDoesNotExist_shouldReturnNullAndShowDialog()
     {
         try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class))
         {
@@ -38,7 +38,7 @@ class SlideItemFactoryTest
     }
 
     @Test
-    void createSlideItem_shouldReturnBitmapItem_whenTypeIsImageAndImageExists()
+    void createSlideItem_whenTypeIsImageAndImageExists_shouldReturnBitmapItem()
     {
         SlideItem item = SlideItemFactory.createSlideItem(new XMLAccessor().getImage(), "default-image.jpg", 1);
         assertNotNull(item);
@@ -46,7 +46,7 @@ class SlideItemFactoryTest
     }
 
     @Test
-    void createSlideItem_shouldReturnNull_whenTypeIsUnknown()
+    void createSlideItem_whenTypeIsUnknown_shouldReturnNull()
     {
         SlideItem item = SlideItemFactory.createSlideItem("qwerty", "Test", 1);
         assertNull(item);

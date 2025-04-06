@@ -31,7 +31,7 @@ class XMLAccessorTest
     }
 
     @Test
-    void slideItemAction_enteredCorrectTEXTTypeText_shouldAddTextItem()
+    void slideItemAction_whenTypeIsText_shouldAddTextItem()
     {
         this.xmlAccessor.slideItemAction(this.slide, new XMLAccessor().getText(), "Test", 1);
 
@@ -39,7 +39,7 @@ class XMLAccessorTest
     }
 
     @Test
-    void slideItemAction_enteredCorrectIMAGETypeAndCorrectImageName_shouldAddBitMapItemAndNoDialog()
+    void slideItemAction_whenTypeIsImageAndImageExists_shouldAddBitMapItem()
     {
         this.xmlAccessor.slideItemAction(this.slide, new XMLAccessor().getImage(), "default-image.jpg", 1);
 
@@ -47,7 +47,7 @@ class XMLAccessorTest
     }
 
     @Test
-    void slideItemAction_enteredCorrectIMAGETypeAndIncorrectImageName_shouldShowDialogAndNotAddItem()
+    void slideItemAction_whenTypeIsImageAndImageDoesNotExist_shouldShowDialogAndNotAddItem()
     {
         try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class))
         {
@@ -62,7 +62,7 @@ class XMLAccessorTest
     }
 
     @Test
-    void slideItemAction_enteredIncorrectTypeText_shouldNotAddItemAndShowDialog()
+    void slideItemAction_whenTypeIsInvalid_shouldNotAddItemAndShowDialog()
     {
         this.xmlAccessor.slideItemAction(this.slide, "qwerty", "default-image.jpg", 1);
 

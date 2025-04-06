@@ -15,11 +15,15 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewCommand implements Command
 {
     private Presentation presentation;
     private Frame parent;
+    private List<Slide> previousSlides;
+    private String previousTitle;
 
     public NewCommand(Presentation presentation, Frame parent)
     {
@@ -28,8 +32,10 @@ public class NewCommand implements Command
     }
 
     @Override
-    public void execute()
+    public boolean execute()
     {
+        storeCurrentState();
+
         int choice = JOptionPane.showOptionDialog(
                 parent,
                 "Do you want to create a new blank presentation or open an existing one?",
@@ -41,12 +47,16 @@ public class NewCommand implements Command
                 "Blank"
         );
 
-        if (choice == JOptionPane.YES_OPTION)
+        if (choice == 0)
         {
             presentation.clear();
+            presentation.setTitle("New Presentation");
             presentation.append(new Slide());
+            parent.repaint();
+
+            return true;
         }
-        else if (choice == JOptionPane.NO_OPTION)
+        else if (choice == 1)
         {
             FileDialog fileDialog = new FileDialog(parent, "Open Presentation", FileDialog.LOAD);
             fileDialog.setVisible(true);
@@ -60,16 +70,54 @@ public class NewCommand implements Command
                 {
                     File file = new File(fileDir, fileName);
                     loadPresentationFromXML(file);
+                    return true;
                 }
                 catch (Exception e)
                 {
-                    JOptionPane.showMessageDialog(parent, "Error loading file: " + e.getMessage(),
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(parent,
+                            "Error loading file: " + e.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+
+                    return false;
                 }
             }
         }
 
-        parent.repaint();
+        return false;
+    }
+
+    @Override
+    public boolean undo()
+    {
+        if (previousSlides != null)
+        {
+            presentation.clear();
+            presentation.setTitle(previousTitle);
+            for (Slide slide : previousSlides)
+            {
+                presentation.append(slide);
+            }
+            parent.repaint();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return "New Presentation";
+    }
+
+    private void storeCurrentState()
+    {
+        previousTitle = presentation.getTitle();
+        previousSlides = new ArrayList<>();
+        for (int i = 0; i < presentation.getSize(); i++)
+        {
+            previousSlides.add(presentation.getSlide(i));
+        }
     }
 
     private void loadPresentationFromXML(File file) throws Exception
@@ -113,12 +161,7 @@ public class NewCommand implements Command
         {
             e.printStackTrace();
             JOptionPane.showMessageDialog(parent, "Error parsing the XML: " + e.getMessage());
+            throw e;
         }
-    }
-
-    @Override
-    public void undo()
-    {
-        // No undo available.
     }
 }

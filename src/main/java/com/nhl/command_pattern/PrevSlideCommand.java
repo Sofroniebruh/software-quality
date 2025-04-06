@@ -22,14 +22,24 @@ public class PrevSlideCommand implements Command
     }
 
     @Override
-    public void execute()
+    public boolean execute()
     {
         presentation.prevSlide();
+
+        return true;
     }
 
     @Override
-    public void undo()
+    public boolean undo()
     {
         presentation.nextSlide();
+
+        return true;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return "Previous Slide";
     }
 }

@@ -33,11 +33,15 @@ public class SlideViewerFrame extends JFrame
             }
         });
 
-        getContentPane().add(slideViewerComponent.getScrollPane());
-
+        JScrollPane scrollPane = slideViewerComponent.getScrollPane();
+        getContentPane().add(scrollPane);
+        setSize(new Dimension(WIDTH, HEIGHT));
+        setMinimumSize(new Dimension(800, 600));
+        setLocationRelativeTo(null);
+        
         addKeyListener(new KeyController(presentation));
         setMenuBar(new MenuController(this, presentation));
-        setSize(new Dimension(WIDTH, HEIGHT));
+        
         setVisible(true);
     }
 }

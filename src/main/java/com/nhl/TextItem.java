@@ -83,11 +83,13 @@ public class TextItem extends SlideItem
         {
             return;
         }
+
         List<TextLayout> layouts = getLayouts(g, myStyle, scale);
         Point pen = new Point(x + (int) (myStyle.getIndent() * scale), y + (int) (myStyle.getLeading() * scale));
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(myStyle.getColor());
         Iterator<TextLayout> it = layouts.iterator();
+
         while (it.hasNext())
         {
             TextLayout layout = it.next();

@@ -1,6 +1,5 @@
 package com.nhl.command_pattern;
 
-import com.nhl.Style;
 import com.nhl.observer_pattern.Presentation;
 import com.nhl.SlideItem;
 import com.nhl.XMLAccessor;
@@ -14,6 +13,8 @@ public class EditCommand implements Command
     private Presentation presentation;
     private Frame parent;
     private XMLAccessor accessor;
+    private SlideItem addedItem;
+    private int addedItemIndex;
 
     public EditCommand(Presentation presentation, Frame parent)
     {
@@ -23,7 +24,7 @@ public class EditCommand implements Command
     }
 
     @Override
-    public void execute()
+    public boolean execute()
     {
         String[] options = {this.accessor.getText(), this.accessor.getImage()};
         int choice = JOptionPane.showOptionDialog(
@@ -39,61 +40,87 @@ public class EditCommand implements Command
 
         if (choice == 0)
         {
-            addItem(this.accessor.getText());
+            return addItem(this.accessor.getText());
         }
         else if (choice == 1)
         {
-            addItem(this.accessor.getImage());
+            return addItem(this.accessor.getImage());
         }
-    }
 
-    private void addItem(String type)
-    {
-        String text = JOptionPane.showInputDialog("Enter text: ");
-        String level = JOptionPane.showInputDialog("Enter level from 1 to " + Style.styles.length + ": ");
-
-        if (text != null && !text.trim().isEmpty() && level != null && !level.trim().isEmpty())
-        {
-            try
-            {
-                int levelInt = Integer.parseInt(level);
-
-                if (levelInt < 0 || levelInt > Style.styles.length)
-                {
-                    dialog("Invalid level " + levelInt + ". Must be between 0 and " + (Style.styles.length) + ". Do you want to retry?", "Out of bounds");
-
-                    return;
-                }
-
-                SlideItem slideItem = SlideItemFactory.createSlideItem(type, text, Integer.parseInt(level));
-
-                this.presentation.getCurrentSlide().append(slideItem);
-                parent.repaint();
-            }
-            catch (NumberFormatException e)
-            {
-                dialog("Invalid values provided. Do you want to retry?", "Invalid values");
-            }
-        }
-        else
-        {
-            dialog("Invalid values provided. Do you want to retry?", "Invalid values");
-        }
-    }
-
-    public void dialog(String text, String title)
-    {
-        int result = JOptionPane.showConfirmDialog(null, text, title, JOptionPane.YES_NO_OPTION);
-
-        if (result == JOptionPane.YES_OPTION)
-        {
-            execute();
-        }
+        return false;
     }
 
     @Override
-    public void undo()
+    public boolean undo()
     {
+        if (addedItem != null && presentation.getCurrentSlide() != null)
+        {
+            presentation.getCurrentSlide().removeItem(addedItemIndex);
+            parent.repaint();
 
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return "Edit Slide";
+    }
+
+    private boolean addItem(String type)
+    {
+        if (presentation.getCurrentSlide() == null)
+        {
+            JOptionPane.showMessageDialog(parent,
+                    "Please select a slide first",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+            return false;
+        }
+
+        String text = JOptionPane.showInputDialog("Enter the text");
+        if (text == null)
+        {
+            return false;
+        }
+
+        int level = 1;
+        String[] levels = {"1", "2", "3", "4"};
+        int levelChoice = JOptionPane.showOptionDialog(
+                null,
+                "Choose the level:",
+                "Select Level",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                levels,
+                levels[0]
+        );
+
+        if (levelChoice >= 0)
+        {
+            level = Integer.parseInt(levels[levelChoice]);
+        }
+
+        addedItem = SlideItemFactory.createSlideItem(type, text, level);
+        if (addedItem == null)
+        {
+            JOptionPane.showMessageDialog(parent,
+                    "Error: Unknown type '" + type + "'. Cannot create SlideItem.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+            return false;
+        }
+
+        addedItemIndex = presentation.getCurrentSlide().getSlideItems().size();
+        presentation.getCurrentSlide().append(addedItem);
+        parent.repaint();
+
+        return true;
     }
 }

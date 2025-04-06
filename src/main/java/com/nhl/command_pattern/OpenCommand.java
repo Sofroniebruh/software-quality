@@ -1,6 +1,7 @@
-package com.nhl;
+package com.nhl.command_pattern;
 
-import com.nhl.command_pattern.Command;
+import com.nhl.Slide;
+import com.nhl.XMLAccessor;
 import com.nhl.observer_pattern.Presentation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -12,11 +13,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpenCommand implements Command
 {
     private Presentation presentation;
     private Frame parent;
+    private List<Slide> previousSlides;
+    private String previousTitle;
     public static final String TESTFILE = "test.xml";
     public static final String IOEX = "IO Exception: ";
     public static final String LOADERR = "Load Error";
@@ -27,29 +32,11 @@ public class OpenCommand implements Command
         this.parent = parent;
     }
 
-    public Presentation getPresentation()
-    {
-        return presentation;
-    }
-
-    public void setPresentation(Presentation presentation)
-    {
-        this.presentation = presentation;
-    }
-
-    public Frame getParent()
-    {
-        return parent;
-    }
-
-    public void setParent(Frame parent)
-    {
-        this.parent = parent;
-    }
-
     @Override
-    public void execute()
+    public boolean execute()
     {
+        storeCurrentState();
+
         FileDialog fileDialog = new FileDialog(parent, "Open Presentation", FileDialog.LOAD);
         fileDialog.setVisible(true);
 
@@ -62,15 +49,56 @@ public class OpenCommand implements Command
             {
                 File file = new File(fileDir, fileName);
                 loadPresentationFromXML(file);
+
+                return true;
             }
             catch (Exception e)
             {
-                JOptionPane.showMessageDialog(parent, "Error loading file: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent,
+                        "Error loading file: " + e.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+
+                return false;
             }
         }
 
-        parent.repaint();
+        return false;
+    }
+
+    @Override
+    public boolean undo()
+    {
+        if (previousSlides != null)
+        {
+            presentation.clear();
+            presentation.setTitle(previousTitle);
+            for (Slide slide : previousSlides)
+            {
+                presentation.append(slide);
+            }
+            parent.repaint();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return "Open Presentation";
+    }
+
+    private void storeCurrentState()
+    {
+        previousTitle = presentation.getTitle();
+        previousSlides = new ArrayList<>();
+        for (int i = 0; i < presentation.getSize(); i++)
+        {
+            previousSlides.add(presentation.getSlide(i));
+        }
     }
 
     private void loadPresentationFromXML(File file) throws Exception
@@ -96,10 +124,12 @@ public class OpenCommand implements Command
             {
                 Element slideElement = (Element) slideNodes.item(i);
                 Slide slide = new Slide();
+
                 slide.setTitle(slideElement.getAttribute("title"));
 
                 NodeList itemNodes = slideElement.getElementsByTagName("item");
                 XMLAccessor xmlAccessor = new XMLAccessor();
+
                 for (int j = 0; j < itemNodes.getLength(); j++)
                 {
                     Element itemElement = (Element) itemNodes.item(j);
@@ -114,12 +144,7 @@ public class OpenCommand implements Command
         {
             e.printStackTrace();
             JOptionPane.showMessageDialog(parent, "Error parsing the XML: " + e.getMessage());
+            throw e;
         }
     }
-
-    @Override
-    public void undo()
-    {
-        // No undo available.
-    }
-}
+} 

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class SlideIntegrationTest
 {
     @Test
-    void slideItemAction_shouldWorkCorrectly()
+    void slideItemAction_whenCalled_shouldCreateAndAppendSlideItem()
     {
         Slide slide = new Slide();
         SlideItem slideItem = SlideItemFactory.createSlideItem(new XMLAccessor().getText(), "Test", 1);

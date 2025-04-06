@@ -45,6 +45,10 @@ public class XMLAccessor extends Accessor
     private String getTitle(Element element, String tagName)
     {
         NodeList titles = element.getElementsByTagName(tagName);
+        if (titles.getLength() == 0)
+        {
+            return "";
+        }
 
         return titles.item(0).getTextContent();
     }
@@ -82,15 +86,15 @@ public class XMLAccessor extends Accessor
         }
         catch (IOException iox)
         {
-            System.err.println(iox.toString());
+            throw iox;
         }
         catch (SAXException sax)
         {
-            System.err.println(sax.getMessage());
+            throw new IOException("Error parsing XML: " + sax.getMessage(), sax);
         }
         catch (ParserConfigurationException pcx)
         {
-            System.err.println(PCE);
+            throw new IOException("Error configuring XML parser: " + PCE, pcx);
         }
     }
 
@@ -106,7 +110,6 @@ public class XMLAccessor extends Accessor
 
         slide.append(slideItem);
     }
-
 
     public void loadSlideItem(Slide slide, Element item)
     {

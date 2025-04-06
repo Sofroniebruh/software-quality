@@ -57,6 +57,18 @@ public class Slide
         return items.size();
     }
 
+    public boolean removeItem(int index)
+    {
+        if (index < 0 || index >= items.size())
+        {
+            return false;
+        }
+
+        items.removeElementAt(index);
+
+        return true;
+    }
+
     public void draw(Graphics g, Rectangle area, ImageObserver view)
     {
         float scale = getScale(area);

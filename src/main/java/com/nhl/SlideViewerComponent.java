@@ -21,7 +21,7 @@ public class SlideViewerComponent extends JComponent implements PresentationObse
     private static final int FONTSTYLE = Font.BOLD;
     private static final int FONTHEIGHT = 10;
     private static final int XPOS = 20;
-    private static final int YPOS = 20  ;
+    private static final int YPOS = 20;
 
     public SlideViewerComponent(JFrame frame)
     {
@@ -31,6 +31,10 @@ public class SlideViewerComponent extends JComponent implements PresentationObse
 
         scrollPane = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getViewport().setBackground(BGCOLOR);
+
+        scrollPane.setPreferredSize(new Dimension(Slide.WIDTH, Slide.HEIGHT));
+
+        setPreferredSize(new Dimension(Slide.WIDTH, Slide.HEIGHT));
     }
 
     public JScrollPane getScrollPane()
@@ -40,7 +44,9 @@ public class SlideViewerComponent extends JComponent implements PresentationObse
 
     public Dimension getPreferredSize()
     {
-        return new Dimension(Slide.WIDTH, Math.max(Slide.HEIGHT, getSlideHeight()));
+        int contentHeight = getSlideHeight();
+
+        return new Dimension(Slide.WIDTH, Math.max(Slide.HEIGHT, contentHeight));
     }
 
     private int getSlideHeight()
@@ -76,6 +82,7 @@ public class SlideViewerComponent extends JComponent implements PresentationObse
             System.out.println("Updated slide: " + slide.getTitle());
         }
 
+        setPreferredSize(getPreferredSize());
         revalidate();
         repaint();
         frame.setTitle(presentation.getTitle());
