@@ -12,7 +12,7 @@ public class Presentation implements ISlideManager, INavigation
     private String showTitle;
     private final ArrayList<Slide> showList = new ArrayList<>();
     private int currentSlideNumber = 0;
-    private final PresentationSubject subject;
+    private final Subject subject;
     private final IUIInteraction uiInteraction;
     private final IErrorHandler errorHandler;
 
@@ -25,7 +25,7 @@ public class Presentation implements ISlideManager, INavigation
     {
         this.uiInteraction = uiInteraction;
         this.errorHandler = new PresentationErrorHandler(uiInteraction);
-        this.subject = new PresentationSubjectImpl();
+        this.subject = new SubjectImpl();
         clear();
     }
 
@@ -177,12 +177,12 @@ public class Presentation implements ISlideManager, INavigation
         }
     }
 
-    public void registerObserver(PresentationObserver observer)
+    public void registerObserver(Observer observer)
     {
         this.subject.registerObserver(observer);
     }
 
-    public void unregisterObserver(PresentationObserver observer)
+    public void unregisterObserver(Observer observer)
     {
         this.subject.unregisterObserver(observer);
     }
@@ -197,7 +197,7 @@ public class Presentation implements ISlideManager, INavigation
         SystemOperations.exit(n);
     }
 
-    public List<PresentationObserver> getObservers()
+    public List<Observer> getObservers()
     {
         return this.subject.getObservers();
     }

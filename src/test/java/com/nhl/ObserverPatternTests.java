@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.nhl.observer_pattern.Presentation;
-import com.nhl.observer_pattern.PresentationObserver;
+import com.nhl.observer_pattern.Observer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ public class ObserverPatternTests
     private Presentation presentation;
     private DummyObserver dummy;
 
-    private static class DummyObserver implements PresentationObserver
+    private static class DummyObserver implements Observer
     {
         private Presentation observedPresentation;
         private Slide observedSlide;

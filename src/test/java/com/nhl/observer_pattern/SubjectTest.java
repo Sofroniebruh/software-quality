@@ -9,14 +9,13 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-class PresentationSubjectTest
+class SubjectTest
 {
-    private PresentationSubject subject;
+    private Subject subject;
 
     @Mock
-    private PresentationObserver mockObserver;
+    private Observer mockObserver;
 
     @Mock
     private Presentation mockPresentation;
@@ -28,7 +27,7 @@ class PresentationSubjectTest
     void setUp()
     {
         MockitoAnnotations.openMocks(this);
-        subject = new PresentationSubjectImpl();
+        subject = new SubjectImpl();
     }
 
     @Test
@@ -36,7 +35,7 @@ class PresentationSubjectTest
     {
         subject.registerObserver(mockObserver);
 
-        List<PresentationObserver> observers = subject.getObservers();
+        List<Observer> observers = subject.getObservers();
 
         assertTrue(observers.contains(mockObserver));
     }
@@ -47,7 +46,7 @@ class PresentationSubjectTest
         subject.registerObserver(mockObserver);
         subject.registerObserver(mockObserver);
 
-        List<PresentationObserver> observers = subject.getObservers();
+        List<Observer> observers = subject.getObservers();
 
         assertEquals(1, observers.size());
         assertTrue(observers.contains(mockObserver));
@@ -59,7 +58,7 @@ class PresentationSubjectTest
         subject.registerObserver(mockObserver);
         subject.unregisterObserver(mockObserver);
 
-        List<PresentationObserver> observers = subject.getObservers();
+        List<Observer> observers = subject.getObservers();
 
         assertFalse(observers.contains(mockObserver));
     }
@@ -70,7 +69,7 @@ class PresentationSubjectTest
         subject.registerObserver(mockObserver);
         subject.notifyObservers(mockPresentation, mockSlide);
 
-        List<PresentationObserver> observers = subject.getObservers();
+        List<Observer> observers = subject.getObservers();
 
         assertTrue(observers.contains(mockObserver));
     }
@@ -80,7 +79,7 @@ class PresentationSubjectTest
     {
         subject.registerObserver(mockObserver);
 
-        List<PresentationObserver> observers = subject.getObservers();
+        List<Observer> observers = subject.getObservers();
 
         assertNotNull(observers);
         assertEquals(1, observers.size());
