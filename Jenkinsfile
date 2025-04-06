@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-        stage('Push to Test if Tests Pass') {
+        stage('Push to Main if Tests Pass') {
                     steps {
                         script {
                             withCredentials([usernamePassword(credentialsId: 'github-credentials-for-sofronie-account', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
@@ -54,9 +54,9 @@ pipeline {
                                 git config --global user.email "jenkins@example.com"
                                 git config --global user.name "Jenkins CI"
                                 git remote set-url origin https://${GIT_USER}:${GIT_PASS}@github.com/Sofroniebruh/software-quality.git
-                                git checkout test
-                                git merge dev
-                                git push origin test
+                                git checkout main
+                                git merge test
+                                git push origin main
                                 '''
                             }
                         }
