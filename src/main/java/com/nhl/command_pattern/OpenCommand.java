@@ -18,8 +18,8 @@ import java.util.List;
 
 public class OpenCommand implements Command
 {
-    private Presentation presentation;
-    private Frame parent;
+    private final Presentation presentation;
+    private final Frame parent;
     private List<Slide> previousSlides;
     private String previousTitle;
     public static final String TESTFILE = "test.xml";
@@ -35,9 +35,9 @@ public class OpenCommand implements Command
     @Override
     public boolean execute()
     {
-        storeCurrentState();
+        this.storeCurrentState();
 
-        FileDialog fileDialog = new FileDialog(parent, "Open Presentation", FileDialog.LOAD);
+        FileDialog fileDialog = new FileDialog(this.parent, "Open Presentation", FileDialog.LOAD);
         fileDialog.setVisible(true);
 
         String fileDir = fileDialog.getDirectory();
@@ -48,13 +48,13 @@ public class OpenCommand implements Command
             try
             {
                 File file = new File(fileDir, fileName);
-                loadPresentationFromXML(file);
+                this.loadPresentationFromXML(file);
 
                 return true;
             }
             catch (Exception e)
             {
-                JOptionPane.showMessageDialog(parent,
+                JOptionPane.showMessageDialog(this.parent,
                         "Error loading file: " + e.getMessage(),
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -69,15 +69,15 @@ public class OpenCommand implements Command
     @Override
     public boolean undo()
     {
-        if (previousSlides != null)
+        if (this.previousSlides != null)
         {
-            presentation.clear();
-            presentation.setTitle(previousTitle);
-            for (Slide slide : previousSlides)
+            this.presentation.clear();
+            this.presentation.setTitle(this.previousTitle);
+            for (Slide slide : this.previousSlides)
             {
-                presentation.append(slide);
+                this.presentation.append(slide);
             }
-            parent.repaint();
+            this.parent.repaint();
 
             return true;
         }
@@ -91,17 +91,17 @@ public class OpenCommand implements Command
         return "Open Presentation";
     }
 
-    private void storeCurrentState()
+    public void storeCurrentState()
     {
-        previousTitle = presentation.getTitle();
-        previousSlides = new ArrayList<>();
-        for (int i = 0; i < presentation.getSize(); i++)
+        this.previousTitle = this.presentation.getTitle();
+        this.previousSlides = new ArrayList<>();
+        for (int i = 0; i < this.presentation.getSize(); i++)
         {
-            previousSlides.add(presentation.getSlide(i));
+            this.previousSlides.add(this.presentation.getSlide(i));
         }
     }
 
-    private void loadPresentationFromXML(File file) throws Exception
+    public void loadPresentationFromXML(File file) throws Exception
     {
         try
         {
@@ -116,7 +116,7 @@ public class OpenCommand implements Command
                 throw new IOException("Invalid XML format: Root element should be <presentation>");
             }
 
-            presentation.clear();
+            this.presentation.clear();
 
             NodeList slideNodes = root.getElementsByTagName("slide");
 
@@ -136,15 +136,15 @@ public class OpenCommand implements Command
                     xmlAccessor.loadSlideItem(slide, itemElement);
                 }
 
-                presentation.append(slide);
-                parent.repaint();
+                this.presentation.append(slide);
+                this.parent.repaint();
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(parent, "Error parsing the XML: " + e.getMessage());
+            JOptionPane.showMessageDialog(this.parent, "Error parsing the XML: " + e.getMessage());
             throw e;
         }
     }
-} 
+}

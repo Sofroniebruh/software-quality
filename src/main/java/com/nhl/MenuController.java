@@ -21,9 +21,9 @@ public class MenuController extends MenuBar
 
     public MenuController(Frame frame, Presentation pres, CommandInvoker invoker)
     {
-        parent = frame;
-        presentation = pres;
-        commandInvoker = invoker;
+        this.parent = frame;
+        this.presentation = pres;
+        this.commandInvoker = invoker;
         setupMenu();
     }
 
@@ -48,10 +48,10 @@ public class MenuController extends MenuBar
         fileMenu.addSeparator();
         fileMenu.add(createMenuItem("Undo", e ->
         {
-            if (commandInvoker.canUndo())
+            if (this.commandInvoker.canUndo())
             {
-                commandInvoker.undo();
-                parent.repaint();
+                this.commandInvoker.undo();
+                this.parent.repaint();
             }
             else
             {

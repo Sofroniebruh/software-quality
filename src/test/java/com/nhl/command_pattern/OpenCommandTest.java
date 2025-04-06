@@ -1,146 +1,73 @@
 package com.nhl.command_pattern;
 
 import com.nhl.Slide;
-import com.nhl.XMLAccessor;
 import com.nhl.observer_pattern.Presentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.MockedStatic;
+import org.mockito.ArgumentCaptor;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import java.awt.Frame;
-import java.util.Vector;
+import java.awt.*;
+import java.io.File;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class OpenCommandTest {
+public class OpenCommandTest
+{
 
-    private OpenCommand command;
-    
-    @Mock
-    private Presentation mockPresentation;
-    
-    @Mock
-    private Frame mockParent;
-    
-    @Mock
-    private Slide mockSlide;
-    
-    @Mock
-    private XMLAccessor mockAccessor;
-    
+    private Presentation presentation;
+    private Frame parent;
+    private OpenCommand openCommand;
+
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        command = new OpenCommand(mockPresentation, mockParent);
+    void setUp()
+    {
+        presentation = mock(Presentation.class);
+        parent = mock(Frame.class);
+        openCommand = new OpenCommand(presentation, parent);
     }
-    
+
     @Test
-    void constructor_whenCalled_shouldInitializeFields() {
-        OpenCommand command = new OpenCommand(mockPresentation, mockParent);
-        assertNotNull(command);
+    void testStoreCurrentState_savesTitleAndSlides()
+    {
+        Slide slide1 = new Slide();
+        Slide slide2 = new Slide();
+
+        when(presentation.getTitle()).thenReturn("Original Title");
+        when(presentation.getSize()).thenReturn(2);
+        when(presentation.getSlide(0)).thenReturn(slide1);
+        when(presentation.getSlide(1)).thenReturn(slide2);
+
+        openCommand.storeCurrentState();
+        boolean undoResult = openCommand.undo();
+
+        assertTrue(undoResult);
+
+        verify(presentation).clear();
+        verify(presentation).setTitle("Original Title");
+        verify(presentation).append(slide1);
+        verify(presentation).append(slide2);
     }
-    
+
     @Test
-    void execute_whenFileSelected_shouldLoadPresentation() {
-        try (MockedStatic<JFileChooser> mockedFileChooser = mockStatic(JFileChooser.class)) {
-            // Setup mocks
-            JFileChooser mockChooser = mock(JFileChooser.class);
-            mockedFileChooser.when(JFileChooser::new).thenReturn(mockChooser);
-            when(mockChooser.showOpenDialog(mockParent)).thenReturn(JFileChooser.APPROVE_OPTION);
-            when(mockChooser.getSelectedFile()).thenReturn(new java.io.File("test.xml"));
-            
-            // Execute
-            boolean result = command.execute();
-            
-            // Verify
-            assertTrue(result);
-            verify(mockPresentation).clear();
-            verify(mockPresentation).setTitle(anyString());
-        }
+    void testUndo_returnsFalse_whenNoStateStored()
+    {
+        assertFalse(openCommand.undo());
     }
-    
+
     @Test
-    void execute_whenUserCancels_shouldReturnFalse() {
-        try (MockedStatic<JFileChooser> mockedFileChooser = mockStatic(JFileChooser.class)) {
-            // Setup mocks
-            JFileChooser mockChooser = mock(JFileChooser.class);
-            mockedFileChooser.when(JFileChooser::new).thenReturn(mockChooser);
-            when(mockChooser.showOpenDialog(mockParent)).thenReturn(JFileChooser.CANCEL_OPTION);
-            
-            // Execute
-            boolean result = command.execute();
-            
-            // Verify
-            assertFalse(result);
-            verify(mockPresentation, never()).clear();
-        }
+    void testLoadPresentationFromXML_parsesSlidesAndItems() throws Exception
+    {
+        File file = new File("/Users/esnu/Desktop/Programming/Java/Software quality/software-quality/dump.xml");
+
+        openCommand.loadPresentationFromXML(file);
+
+        verify(presentation).clear();
+        verify(presentation, atLeastOnce()).append(any(Slide.class));
+        verify(parent, atLeastOnce()).repaint();
     }
-    
-    @Test
-    void execute_whenErrorOccurs_shouldShowErrorDialog() {
-        try (MockedStatic<JFileChooser> mockedFileChooser = mockStatic(JFileChooser.class);
-             MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class)) {
-            // Setup mocks
-            JFileChooser mockChooser = mock(JFileChooser.class);
-            mockedFileChooser.when(JFileChooser::new).thenReturn(mockChooser);
-            when(mockChooser.showOpenDialog(mockParent)).thenReturn(JFileChooser.APPROVE_OPTION);
-            when(mockChooser.getSelectedFile()).thenReturn(new java.io.File("nonexistent.xml"));
-            
-            // Execute
-            boolean result = command.execute();
-            
-            // Verify
-            assertFalse(result);
-            mockedJOptionPane.verify(() -> 
-                JOptionPane.showMessageDialog(
-                    mockParent,
-                    "Error loading presentation",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-                )
-            );
-        }
-    }
-    
-    @Test
-    void undo_whenPresentationWasLoaded_shouldRestorePreviousState() {
-        // Setup mocks
-        Vector<Slide> previousSlides = new Vector<>();
-        previousSlides.add(mockSlide);
-        String previousTitle = "Previous Title";
-        
-        // Set previous state
-        command = spy(new OpenCommand(mockPresentation, mockParent));
-        doReturn(previousSlides).when(command).getPreviousSlides();
-        doReturn(previousTitle).when(command).getPreviousTitle();
-        
-        // Execute
-        boolean result = command.undo();
-        
-        // Verify
-        assertTrue(result);
-        verify(mockPresentation).clear();
-        verify(mockPresentation).setTitle(previousTitle);
-        verify(mockPresentation).setSlideNumber(0);
-    }
-    
-    @Test
-    void undo_whenNoPreviousState_shouldReturnFalse() {
-        // Execute
-        boolean result = command.undo();
-        
-        // Verify
-        assertFalse(result);
-        verify(mockPresentation, never()).clear();
-    }
-    
-    @Test
-    void getDescription_whenCalled_shouldReturnCorrectDescription() {
-        assertEquals("Open Presentation", command.getDescription());
-    }
-} 
+}

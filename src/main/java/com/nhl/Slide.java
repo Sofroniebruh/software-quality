@@ -14,75 +14,75 @@ public class Slide
 
     public Slide()
     {
-        items = new Vector<SlideItem>();
+        this.items = new Vector<SlideItem>();
     }
 
     public void append(SlideItem anItem)
     {
-        items.addElement(anItem);
+        this.items.addElement(anItem);
     }
 
     public String getTitle()
     {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String newTitle)
     {
-        title = newTitle;
+        this.title = newTitle;
     }
 
     public void append(int level, String message)
     {
-        append(new TextItem(level, message));
+        this.append(new TextItem(level, message));
     }
 
     public SlideItem getSlideItem(int number)
     {
-        if (number < 0 || number >= items.size())
+        if (number < 0 || number >= this.items.size())
         {
             return null;
         }
 
-        return items.get(number);
+        return this.items.get(number);
     }
 
     public Vector<SlideItem> getSlideItems()
     {
-        return items;
+        return this.items;
     }
 
     public int getSize()
     {
-        return items.size();
+        return this.items.size();
     }
 
     public boolean removeItem(int index)
     {
-        if (index < 0 || index >= items.size())
+        if (index < 0 || index >= this.items.size())
         {
             return false;
         }
 
-        items.removeElementAt(index);
+        this.items.removeElementAt(index);
 
         return true;
     }
 
     public void draw(Graphics g, Rectangle area, ImageObserver view)
     {
-        float scale = getScale(area);
+        float scale = this.getScale(area);
         int y = area.y;
 
-        if (title != null && !title.isEmpty())
+        if (this.title != null && !this.title.isEmpty())
         {
-            SlideItem slideItem = new TextItem(0, title);
+            SlideItem slideItem = new TextItem(0, this.title);
             Style style = Style.getStyle(slideItem.getLevel());
             slideItem.draw(area.x, y, scale, g, style, view);
             y += slideItem.getBoundingBox(g, view, scale, style).height;
         }
 
-        for (SlideItem slideItem : items)
+        for (SlideItem slideItem : this.items)
         {
             Style style = Style.getStyle(slideItem.getLevel());
             slideItem.draw(area.x, y, scale, g, style, view);
