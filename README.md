@@ -28,6 +28,7 @@ We applied **three classic design patterns** to enhance structure and maintainab
 - Open an existing presentation or start a new one  
 - Undo/Redo your actions  
 - Edit slides by adding **text** and/or **images**
+- Save Your presentation
 
 ---
 
