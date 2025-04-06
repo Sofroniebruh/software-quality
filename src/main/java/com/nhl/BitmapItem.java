@@ -69,10 +69,10 @@ public class BitmapItem extends SlideItem
         }
 
         return new Rectangle(
-                (int) (myStyle.indent * scale),
+                (int) (myStyle.getIndent() * scale),
                 0,
                 (int) (bufferedImage.getWidth(observer) * scale),
-                ((int) (myStyle.leading * scale)) + (int) (bufferedImage.getHeight(observer) * scale)
+                ((int) (myStyle.getLeading() * scale)) + (int) (bufferedImage.getHeight(observer) * scale)
         );
     }
 
@@ -83,8 +83,8 @@ public class BitmapItem extends SlideItem
             System.err.println("Cannot draw: Image is null.");
             return;
         }
-        int width = x + (int) (myStyle.indent * scale);
-        int height = y + (int) (myStyle.leading * scale);
+        int width = x + (int) (myStyle.getIndent() * scale);
+        int height = y + (int) (myStyle.getLeading() * scale);
         g.drawImage(
                 bufferedImage,
                 width,
