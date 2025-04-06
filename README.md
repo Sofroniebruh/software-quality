@@ -4,6 +4,8 @@ This repository contains the codebase for our **Software Quality** course projec
 
 ⚠️ Attention! Please keep in mind that I set up GitHub personal key to expire after **the first of June, 2025**. After this Jenkins will no longer be able to trigger on **push** action in this repository. 
 
+All the documents are located in the **diagrams** folder
+
 ---
 
 ## Group Members
