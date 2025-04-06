@@ -1,6 +1,5 @@
 package com.nhl;
 
-import com.nhl.command_pattern.Command;
 import com.nhl.command_pattern.ExitCommand;
 import com.nhl.command_pattern.NextSlideCommand;
 import com.nhl.command_pattern.PrevSlideCommand;
@@ -16,7 +15,6 @@ import static org.mockito.Mockito.*;
 
 class KeyControllerTest
 {
-
     private KeyController keyController;
 
     @Mock

@@ -10,7 +10,6 @@ import static org.mockito.Mockito.*;
 
 class CommandInvokerTest
 {
-
     private CommandInvoker commandInvoker;
 
     @Mock

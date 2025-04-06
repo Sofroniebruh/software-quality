@@ -11,7 +11,6 @@ import static org.mockito.Mockito.*;
 
 class PrevSlideCommandTest
 {
-
     private PrevSlideCommand command;
 
     @Mock

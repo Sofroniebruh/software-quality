@@ -13,7 +13,6 @@ import static org.mockito.Mockito.*;
 
 class PresentationSubjectTest
 {
-
     private PresentationSubject subject;
 
     @Mock

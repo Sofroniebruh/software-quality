@@ -11,7 +11,6 @@ import static org.mockito.Mockito.*;
 
 class PresentationErrorHandlerTest
 {
-
     private PresentationErrorHandler errorHandler;
 
     @Mock

@@ -9,7 +9,6 @@ import static org.mockito.Mockito.mockStatic;
 
 class SwingUIInteractionTest
 {
-
     @Test
     void showMessage_whenCalled_shouldDisplayMessageDialog()
     {

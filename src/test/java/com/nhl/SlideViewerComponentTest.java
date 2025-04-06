@@ -15,7 +15,6 @@ import static org.mockito.Mockito.*;
 
 class SlideViewerComponentTest
 {
-
     private SlideViewerComponent slideViewer;
 
     @Mock

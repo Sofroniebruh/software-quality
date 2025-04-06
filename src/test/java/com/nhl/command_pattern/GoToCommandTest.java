@@ -14,7 +14,6 @@ import static org.mockito.Mockito.*;
 
 class GoToCommandTest
 {
-
     private GoToCommand command;
 
     @Mock
