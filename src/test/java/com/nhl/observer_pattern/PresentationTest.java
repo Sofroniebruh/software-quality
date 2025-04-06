@@ -9,7 +9,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class PresentationTest
 {
@@ -22,10 +21,10 @@ class PresentationTest
     private IErrorHandler mockErrorHandler;
 
     @Mock
-    private PresentationSubject mockSubject;
+    private Subject mockSubject;
 
     @Mock
-    private PresentationObserver mockObserver;
+    private Observer mockObserver;
 
     @BeforeEach
     void setUp()
@@ -205,7 +204,7 @@ class PresentationTest
     void registerAndUnregisterObserver_whenCalled_shouldUpdateObserversList()
     {
         presentation.registerObserver(mockObserver);
-        List<PresentationObserver> observers = presentation.getObservers();
+        List<Observer> observers = presentation.getObservers();
         assertTrue(observers.contains(mockObserver));
 
         presentation.unregisterObserver(mockObserver);

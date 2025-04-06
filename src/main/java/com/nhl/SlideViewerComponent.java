@@ -1,12 +1,12 @@
 package com.nhl;
 
 import com.nhl.observer_pattern.Presentation;
-import com.nhl.observer_pattern.PresentationObserver;
+import com.nhl.observer_pattern.Observer;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class SlideViewerComponent extends JComponent implements PresentationObserver
+public class SlideViewerComponent extends JComponent implements Observer
 {
     private Slide slide;
     private Presentation presentation;

@@ -5,12 +5,12 @@ import com.nhl.Slide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PresentationSubjectImpl implements PresentationSubject
+public class SubjectImpl implements Subject
 {
-    private final List<PresentationObserver> observers = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
 
     @Override
-    public void registerObserver(PresentationObserver observer)
+    public void registerObserver(Observer observer)
     {
         if (!this.observers.contains(observer))
         {
@@ -19,7 +19,7 @@ public class PresentationSubjectImpl implements PresentationSubject
     }
 
     @Override
-    public void unregisterObserver(PresentationObserver observer)
+    public void unregisterObserver(Observer observer)
     {
         this.observers.remove(observer);
     }
@@ -27,14 +27,14 @@ public class PresentationSubjectImpl implements PresentationSubject
     @Override
     public void notifyObservers(Presentation presentation, Slide currentSlide)
     {
-        for (PresentationObserver observer : this.observers)
+        for (Observer observer : this.observers)
         {
             observer.update(presentation, currentSlide);
         }
     }
 
     @Override
-    public List<PresentationObserver> getObservers()
+    public List<Observer> getObservers()
     {
         return this.observers;
     }
