@@ -1,9 +1,17 @@
 package com.nhl;
 
+import com.nhl.command_pattern.GoToCommand;
+import com.nhl.command_pattern.NextSlideCommand;
+import com.nhl.command_pattern.PrevSlideCommand;
+import com.nhl.observer_pattern.Presentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javax.swing.JOptionPane;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class CommandPatternTests
 {
@@ -23,7 +31,7 @@ public class CommandPatternTests
     }
 
     @Test
-    public void testNextSlideCommand()
+    public void nextSlideCommand_whenExecuted_shouldMoveToNextSlide()
     {
         NextSlideCommand next = new NextSlideCommand(presentation);
         next.execute();
@@ -33,7 +41,7 @@ public class CommandPatternTests
     }
 
     @Test
-    public void testPrevSlideCommand()
+    public void prevSlideCommand_whenExecuted_shouldMoveToPreviousSlide()
     {
         presentation.setSlideNumber(1);
         PrevSlideCommand prev = new PrevSlideCommand(presentation);
@@ -44,7 +52,7 @@ public class CommandPatternTests
     }
 
     @Test
-    public void testGoToCommandUndo()
+    public void goToCommand_whenExecuted_shouldMoveToSpecifiedSlide()
     {
         presentation.setSlideNumber(0);
         TestableGoToCommand goTo = new TestableGoToCommand(presentation, "2");
@@ -52,6 +60,55 @@ public class CommandPatternTests
         assertEquals(1, presentation.getSlideNumber());
         goTo.undo();
         assertEquals(0, presentation.getSlideNumber());
+    }
+
+    @Test
+    public void goToCommand_whenDialogShowsValidInput_shouldNavigateToSpecifiedSlide()
+    {
+        presentation.setSlideNumber(0);
+
+        try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class))
+        {
+            mockedJOptionPane.when(() -> JOptionPane.showInputDialog(anyString())).thenReturn("2");
+
+            GoToCommand goTo = new GoToCommand(presentation);
+            boolean result = goTo.execute();
+
+            mockedJOptionPane.verify(() -> JOptionPane.showInputDialog(GoToCommand.PAGENR));
+
+            assertEquals(1, presentation.getSlideNumber());
+            assertTrue(result);
+        }
+    }
+
+    @Test
+    public void goToCommand_whenDialogShowsInvalidInput_shouldNotNavigateAndReturnFalse()
+    {
+        presentation.setSlideNumber(0);
+
+        try (MockedStatic<JOptionPane> mockedJOptionPane = mockStatic(JOptionPane.class))
+        {
+            mockedJOptionPane.when(() -> JOptionPane.showInputDialog(anyString())).thenReturn("invalid");
+
+            mockedJOptionPane.when(() -> JOptionPane.showConfirmDialog(any(), anyString(), anyString(), anyInt()))
+                    .thenReturn(JOptionPane.NO_OPTION);
+
+            GoToCommand goTo = new GoToCommand(presentation);
+            boolean result = goTo.execute();
+
+            mockedJOptionPane.verify(() -> JOptionPane.showInputDialog(GoToCommand.PAGENR));
+            mockedJOptionPane.verify(() -> JOptionPane.showConfirmDialog(any(), anyString(), anyString(), anyInt()));
+
+            assertEquals(0, presentation.getSlideNumber());
+            assertFalse(result);
+        }
+    }
+
+    @Test
+    public void getDescription_whenCalled_shouldReturnCorrectDescription()
+    {
+        GoToCommand goTo = new GoToCommand(presentation);
+        assertEquals("Go to Slide", goTo.getDescription());
     }
 
     private static class TestableGoToCommand extends GoToCommand
@@ -65,11 +122,11 @@ public class CommandPatternTests
         }
 
         @Override
-        public void execute()
+        public boolean execute()
         {
-            previousSlideNumber = getPresentation().getSlideNumber();
             int pageNumber = Integer.parseInt(testInput);
             getPresentation().setSlideNumber(pageNumber - 1);
+            return true;
         }
     }
 }

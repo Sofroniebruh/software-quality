@@ -1,123 +1,117 @@
 package com.nhl;
 
-import com.nhl.factory_method.XMLAccessor;
+import com.nhl.command_pattern.*;
+import com.nhl.observer_pattern.Presentation;
 
-import java.awt.MenuBar;
-import java.awt.Frame;
-import java.awt.Menu;
-import java.awt.MenuItem;
-import java.awt.MenuShortcut;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
 
 public class MenuController extends MenuBar
 {
+    private static final long serialVersionUID = 227L;
     private Frame parent;
     private Presentation presentation;
-    private static final long serialVersionUID = 227L;
-    protected static final String ABOUT = "About";
-    protected static final String FILE = "File";
-    protected static final String EXIT = "Exit";
-    protected static final String GOTO = "Go to";
-    protected static final String HELP = "Help";
-    protected static final String NEW = "New";
-    protected static final String NEXT = "Next";
-    protected static final String OPEN = "Open";
-    protected static final String PREV = "Prev";
-    protected static final String SAVE = "Save";
-    protected static final String VIEW = "View";
+    private CommandInvoker commandInvoker;
 
     public MenuController(Frame frame, Presentation pres)
     {
-        parent = frame;
-        presentation = pres;
-        MenuItem menuItem;
-        Menu fileMenu = new Menu(FILE);
-        Command openCmd = new OpenCommand(presentation, parent);
-        fileMenu.add(menuItem = mkMenuItem(OPEN));
-        menuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                openCmd.execute();
-            }
-        });
-        Command newCmd = new NewCommand(presentation, parent);
-        fileMenu.add(menuItem = mkMenuItem(NEW));
-        menuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                newCmd.execute();
-            }
-        });
-        Command saveCmd = new SaveCommand(presentation, parent);
-        fileMenu.add(menuItem = mkMenuItem(SAVE));
-        menuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                saveCmd.execute();
-            }
-        });
-        fileMenu.addSeparator();
-        Command exitCmd = new ExitCommand(presentation);
-        fileMenu.add(menuItem = mkMenuItem(EXIT));
-        menuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                exitCmd.execute();
-            }
-        });
-        add(fileMenu);
-        Menu viewMenu = new Menu(VIEW);
-        Command nextCmd = new NextSlideCommand(presentation);
-        viewMenu.add(menuItem = mkMenuItem(NEXT));
-        menuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                nextCmd.execute();
-            }
-        });
-        Command prevCmd = new PrevSlideCommand(presentation);
-        viewMenu.add(menuItem = mkMenuItem(PREV));
-        menuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                prevCmd.execute();
-            }
-        });
-        Command goToCmd = new GoToCommand(presentation);
-        viewMenu.add(menuItem = mkMenuItem(GOTO));
-        menuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                goToCmd.execute();
-            }
-        });
-        add(viewMenu);
-        Menu helpMenu = new Menu(HELP);
-        Command aboutCmd = new AboutCommand(parent);
-        helpMenu.add(menuItem = mkMenuItem(ABOUT));
-        menuItem.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                aboutCmd.execute();
-            }
-        });
-        setHelpMenu(helpMenu);
+        this(frame, pres, new CommandInvoker());
     }
 
-    public MenuItem mkMenuItem(String name)
+    public MenuController(Frame frame, Presentation pres, CommandInvoker invoker)
     {
-        return new MenuItem(name, new MenuShortcut(name.charAt(0)));
+        parent = frame;
+        presentation = pres;
+        commandInvoker = invoker;
+        setupMenu();
+    }
+
+    protected void setupMenu()
+    {
+        add(createFileMenu());
+        add(createViewMenu());
+        add(createEditMenu());
+        add(createHelpMenu());
+    }
+
+    protected Menu createFileMenu()
+    {
+        Menu fileMenu = new Menu("File");
+
+        fileMenu.add(createMenuItem("New", e -> executeCommand(new NewCommand(presentation, parent))));
+        fileMenu.add(createMenuItem("Open", e -> executeCommand(new OpenCommand(presentation, parent))));
+        fileMenu.add(createMenuItem("Save", e -> executeCommand(new SaveCommand(presentation, parent))));
+        fileMenu.addSeparator();
+        fileMenu.add(createMenuItem("Edit", e -> executeCommand(new EditCommand(presentation, parent))));
+        fileMenu.add(createMenuItem("New Slide", e -> executeCommand(new AddNewSlideCommand(presentation))));
+        fileMenu.addSeparator();
+        fileMenu.add(createMenuItem("Undo", e ->
+        {
+            if (commandInvoker.canUndo())
+            {
+                commandInvoker.undo();
+                parent.repaint();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(parent, "Nothing to undo", "Undo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }));
+        fileMenu.add(createMenuItem("Redo", e ->
+        {
+            if (commandInvoker.canRedo())
+            {
+                commandInvoker.redo();
+                parent.repaint();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(parent, "Nothing to redo", "Redo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }));
+        fileMenu.addSeparator();
+        fileMenu.add(createMenuItem("Exit", e -> executeCommand(new ExitCommand(presentation))));
+
+        return fileMenu;
+    }
+
+    protected Menu createViewMenu()
+    {
+        Menu viewMenu = new Menu("View");
+        viewMenu.add(createMenuItem("Next", e -> executeCommand(new NextSlideCommand(presentation))));
+        viewMenu.add(createMenuItem("Previous", e -> executeCommand(new PrevSlideCommand(presentation))));
+        viewMenu.add(createMenuItem("Go to", e -> executeCommand(new GoToCommand(presentation))));
+
+        return viewMenu;
+    }
+
+    protected Menu createEditMenu()
+    {
+        Menu editMenu = new Menu("Edit");
+        editMenu.add(createMenuItem("Add Slide", e -> executeCommand(new AddNewSlideCommand(presentation))));
+
+        return editMenu;
+    }
+
+    protected Menu createHelpMenu()
+    {
+        Menu helpMenu = new Menu("Help");
+        helpMenu.add(createMenuItem("About", e -> executeCommand(new AboutCommand(parent))));
+
+        return helpMenu;
+    }
+
+    protected MenuItem createMenuItem(String label, ActionListener listener)
+    {
+        MenuItem menuItem = new MenuItem(label);
+        menuItem.addActionListener(listener);
+
+        return menuItem;
+    }
+
+    protected void executeCommand(Command command)
+    {
+        commandInvoker.executeCommand(command);
     }
 }

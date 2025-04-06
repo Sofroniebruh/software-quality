@@ -1,6 +1,6 @@
 package com.nhl;
 
-import com.nhl.factory_method.XMLAccessor;
+import com.nhl.observer_pattern.Presentation;
 
 import javax.swing.JOptionPane;
 
@@ -17,6 +17,7 @@ public class JabberPoint
         Style.createStyles();
         Presentation presentation = new Presentation();
         new SlideViewerFrame(JABVERSION, presentation);
+
         try
         {
             if (argv.length == 0)

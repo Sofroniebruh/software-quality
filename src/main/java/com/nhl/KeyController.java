@@ -1,5 +1,11 @@
 package com.nhl;
 
+import com.nhl.command_pattern.Command;
+import com.nhl.command_pattern.ExitCommand;
+import com.nhl.command_pattern.NextSlideCommand;
+import com.nhl.command_pattern.PrevSlideCommand;
+import com.nhl.observer_pattern.Presentation;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 

@@ -1,5 +1,6 @@
 package com.nhl;
 
+import com.nhl.observer_pattern.Presentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ public class IntegrationTests
     }
 
     @Test
-    public void testKeyControllerNextSlide()
+    public void keyController_whenEnterPressed_shouldMoveToNextSlide()
     {
         java.awt.Button mockButton = mock(java.awt.Button.class);
 
@@ -41,7 +42,7 @@ public class IntegrationTests
     }
 
     @Test
-    public void testKeyControllerPrevSlide()
+    public void keyController_whenUpArrowPressed_shouldMoveToPreviousSlide()
     {
         java.awt.Button mockButton = mock(java.awt.Button.class);
 

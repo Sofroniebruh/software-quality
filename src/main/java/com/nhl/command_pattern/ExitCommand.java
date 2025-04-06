@@ -1,4 +1,7 @@
-package com.nhl;
+package com.nhl.command_pattern;
+
+import com.nhl.observer_pattern.Presentation;
+import com.nhl.observer_pattern.SystemOperations;
 
 public class ExitCommand implements Command
 {
@@ -20,14 +23,22 @@ public class ExitCommand implements Command
     }
 
     @Override
-    public void execute()
+    public boolean execute()
     {
-        presentation.exit(0);
+        SystemOperations.exit(0);
+
+        return true;
     }
 
     @Override
-    public void undo()
+    public boolean undo()
     {
-        // No undo available for exit.
+        return false;
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return "Exit Application";
     }
 }

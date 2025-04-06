@@ -28,11 +28,6 @@ public class TextItem extends SlideItem
         text = string;
     }
 
-    public TextItem()
-    {
-        this(0, EMPTYTEXT);
-    }
-
     public String getText()
     {
         return text == null ? "" : text;
@@ -45,8 +40,15 @@ public class TextItem extends SlideItem
 
     public AttributedString getAttributedString(Style style, float scale)
     {
-        AttributedString attrStr = new AttributedString(getText());
-        attrStr.addAttribute(TextAttribute.FONT, style.getFont(scale), 0, text.length());
+        String actualText = getText();
+
+        if (actualText == null || actualText.isEmpty())
+        {
+            actualText = EMPTYTEXT;
+        }
+
+        AttributedString attrStr = new AttributedString(actualText);
+        attrStr.addAttribute(TextAttribute.FONT, style.getFont(scale), 0, actualText.length());
 
         return attrStr;
     }
@@ -81,11 +83,13 @@ public class TextItem extends SlideItem
         {
             return;
         }
+
         List<TextLayout> layouts = getLayouts(g, myStyle, scale);
         Point pen = new Point(x + (int) (myStyle.getIndent() * scale), y + (int) (myStyle.getLeading() * scale));
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(myStyle.getColor());
         Iterator<TextLayout> it = layouts.iterator();
+
         while (it.hasNext())
         {
             TextLayout layout = it.next();

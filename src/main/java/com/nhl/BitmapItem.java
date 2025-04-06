@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.io.IOException;
 
 public class BitmapItem extends SlideItem
@@ -22,11 +23,6 @@ public class BitmapItem extends SlideItem
         loadBufferedImage();
     }
 
-    public BitmapItem()
-    {
-        this(0, null);
-    }
-
     private void loadBufferedImage()
     {
         if (this.imageName != null)
@@ -39,6 +35,7 @@ public class BitmapItem extends SlideItem
             {
                 System.err.println(FILE + this.imageName + NOTFOUND);
                 this.bufferedImage = null;
+                JOptionPane.showMessageDialog(null, "Image was not found", "Image error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -66,6 +63,11 @@ public class BitmapItem extends SlideItem
 
     public Rectangle getBoundingBox(Graphics g, ImageObserver observer, float scale, Style myStyle)
     {
+        if (bufferedImage == null)
+        {
+            return new Rectangle(0, 0, 0, 0);
+        }
+
         return new Rectangle(
                 (int) (myStyle.indent * scale),
                 0,
@@ -93,8 +95,9 @@ public class BitmapItem extends SlideItem
         );
     }
 
+    @Override
     public String toString()
     {
-        return "BitmapItem[" + getLevel() + "," + imageName + "]";
+        return String.format("BitmapItem[level=%d, image='%s']", getLevel(), imageName);
     }
 }

@@ -3,13 +3,6 @@ package com.nhl;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 
-/**
- * De About-box voor com.nhl.JabberPoint.
- *
- * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
- * @version 1.6 2014/05/16 Sylvia Stuurman
- */
-
 public class AboutBox
 {
     public static void show(Frame parent)

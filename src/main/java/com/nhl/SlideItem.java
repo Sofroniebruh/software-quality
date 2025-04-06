@@ -1,5 +1,6 @@
 package com.nhl;
 
+import javax.swing.*;
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.image.ImageObserver;
@@ -10,7 +11,7 @@ public abstract class SlideItem
 
     public SlideItem(int lev)
     {
-        level = lev;
+        this.level = lev;
     }
 
     public SlideItem()

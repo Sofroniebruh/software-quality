@@ -35,7 +35,7 @@ pipeline {
                 }
                 post {
                      always {
-                         junit 'target/surefire-reports/*.xml'
+                                 junit 'target/surefire-reports/*.xml'
                      }
                 }
         }
@@ -60,9 +60,9 @@ pipeline {
                                 git config --global user.email "jenkins@example.com"
                                 git config --global user.name "Jenkins CI"
                                 git remote set-url origin https://${GIT_USER}:${GIT_PASS}@github.com/Sofroniebruh/software-quality.git
-                                git checkout main
+                                git checkout test
                                 git merge dev
-                                git push origin main
+                                git push origin test
                                 '''
                             }
                         }
